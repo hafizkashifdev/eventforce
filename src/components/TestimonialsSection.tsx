@@ -5,11 +5,9 @@ import {
   Box,
   Typography,
   Container,
-  IconButton,
   useMediaQuery,
   Fade,
 } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import Image from 'next/image';
 import { 
   ClientAliAhmad, 
@@ -72,41 +70,19 @@ const TestimonialsSection = () => {
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % (testimonials.length - 2));
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + (testimonials.length - 2)) % (testimonials.length - 2));
-  };
 
   return (
     <Box sx={{ py: 10, backgroundColor: '#FFFFFF' }}>
       <Container maxWidth="lg">
         <Fade in={visible} timeout={700}>
           <Box>
-            {/* Header with Navigation */}
+            {/* Header */}
             <Box sx={{ 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
-              mb: 4,
-              position: 'relative'
+              mb: 6
             }}>
-              <IconButton
-                onClick={prevTestimonial}
-                sx={{
-                  position: 'absolute',
-                  left: 0,
-                  color: '#333333',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.04)',
-                  },
-                }}
-              >
-                <ChevronLeft />
-              </IconButton>
-
               <Typography
                 variant={isMobile ? 'h4' : 'h3'}
                 component="h2"
@@ -120,20 +96,6 @@ const TestimonialsSection = () => {
               >
                 What Our Clients Say About Us
               </Typography>
-
-              <IconButton
-                onClick={nextTestimonial}
-                sx={{
-                  position: 'absolute',
-                  right: 0,
-                  color: '#333333',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.04)',
-                  },
-                }}
-              >
-                <ChevronRight />
-              </IconButton>
             </Box>
 
             {/* Dots Indicator */}

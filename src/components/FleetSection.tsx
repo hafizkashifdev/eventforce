@@ -83,22 +83,23 @@ const FleetSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % Math.max(1, fleet.length - 2));
-    }, 6000);
+      setCurrentIndex((prev) => (prev + 1) % Math.max(1, fleet.length - 3));
+    }, 5000);
     return () => clearInterval(interval);
   }, [fleet.length]);
 
   const nextFleet = () => {
-    setCurrentIndex((prev) => (prev + 1) % Math.max(1, fleet.length - 2));
+    setCurrentIndex((prev) => (prev + 1) % Math.max(1, fleet.length - 3));
   };
 
   const prevFleet = () => {
-    setCurrentIndex((prev) => (prev - 1 + Math.max(1, fleet.length - 2)) % Math.max(1, fleet.length - 2));
+    setCurrentIndex((prev) => (prev - 1 + Math.max(1, fleet.length - 3)) % Math.max(1, fleet.length - 3));
   };
 
+
   return (
-    <Box sx={{ py: 10, backgroundColor: 'grey.50' }}>
-      <Container maxWidth="lg">
+    <Box sx={{ py: 10, px: { lg: 12, md: 6, xs: 2 }, backgroundColor: 'grey.50' }}>
+   
         <Fade in={visible} timeout={700}>
           <Box>
             <Box sx={{ textAlign: 'center', mb: 8 }}>
@@ -106,9 +107,24 @@ const FleetSection = () => {
                 variant={isMobile ? 'h4' : 'h3'}
                 component="h2"
                 sx={{
+                  fontFamily: 'Poppins, sans-serif',
                   fontWeight: 'bold',
-                  color: 'text.primary',
+                  fontSize: '36px',
+                  color: '#525252',
                   mb: 2,
+                  position: 'relative',
+                  display: 'inline-block',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-8px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60px',
+                    height: '4px',
+                    backgroundColor: '#52A4C1',
+                    borderRadius: '2px',
+                  },
                 }}
               >
                 Most Rented Cars
@@ -121,7 +137,7 @@ const FleetSection = () => {
                 onClick={prevFleet}
                 sx={{
                   position: 'absolute',
-                  left: { xs: 8, md: -60 },
+                  left: -60,
                   top: '50%',
                   transform: 'translateY(-50%)',
                   backgroundColor: 'white',
@@ -131,7 +147,7 @@ const FleetSection = () => {
                     transform: 'translateY(-50%) scale(1.1)',
                   },
                   zIndex: 2,
-                  display: 'flex',
+                  display: { xs: 'none', lg: 'flex' },
                 }}
               >
                 <ChevronLeft />
@@ -141,7 +157,7 @@ const FleetSection = () => {
                 onClick={nextFleet}
                 sx={{
                   position: 'absolute',
-                  right: { xs: 8, md: -60 },
+                  right: -60,
                   top: '50%',
                   transform: 'translateY(-50%)',
                   backgroundColor: 'white',
@@ -151,35 +167,40 @@ const FleetSection = () => {
                     transform: 'translateY(-50%) scale(1.1)',
                   },
                   zIndex: 2,
-                  display: 'flex',
+                  display: { xs: 'none', lg: 'flex' },
                 }}
               >
                 <ChevronRight />
               </IconButton>
 
-              {/* Fleet Cards */}
-              <Box sx={{ overflow: 'hidden' }}>
+              {/* Fleet Cards Carousel */}
+              <Box sx={{ overflow: 'hidden', pb: 4 }}>
                 <Box
                   sx={{
                     display: 'flex',
                     transition: 'transform 0.5s ease-in-out',
                     transform: isMobile 
                       ? `translateX(-${currentIndex * 100}%)` 
-                      : `translateX(-${currentIndex * 33.333}%)`,
+                      : `translateX(-${currentIndex * 25}%)`, // 25% for 4 cards on lg
                   }}
                 >
                   {fleet.map((car, index) => (
                     <Box 
                       key={index} 
                       sx={{ 
-                        width: isMobile ? '100%' : '33.333%', 
+                        width: { xs: '100%', sm: '50%', md: '33.333%', lg: '25%' },
                         px: { xs: 1, sm: 2 }, 
-                        flexShrink: 0 
+                        py: 2,
+                        flexShrink: 0,
+                        display: 'flex',
+                        flexDirection: 'column'
                       }}
                     >
                       <Card
                         sx={{
-                          height: '100%',
+                          height: { xs: 400, sm: 450, md: 500 },
+                          display: 'flex',
+                          flexDirection: 'column',
                           transition: 'transform 0.3s, box-shadow 0.3s',
                           '&:hover': {
                             transform: isMobile ? 'none' : 'scale(1.05)',
@@ -217,13 +238,20 @@ const FleetSection = () => {
                           />
                         </CardMedia>
 
-                        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+                        <CardContent sx={{ 
+                          p: { xs: 2, sm: 3 },
+                          display: 'flex',
+                          flexDirection: 'column',
+                          flex: 1,
+                          justifyContent: 'space-between'
+                        }}>
                           <Typography
                             variant="h6"
                             component="h3"
                             sx={{
+                              fontFamily: 'Poppins, sans-serif',
                               fontWeight: 'bold',
-                              color: 'text.primary',
+                              color: '#52A4C1',
                               mb: 2,
                               fontSize: { xs: '1.1rem', sm: '1.25rem' },
                             }}
@@ -233,26 +261,16 @@ const FleetSection = () => {
 
                           <Box sx={{ mb: 3 }}>
                             <Typography
-                              variant="h5"
+                              variant="body1"
                               sx={{
-                                color: 'primary.main',
-                                fontWeight: 'bold',
-                                display: 'inline',
-                                fontSize: { xs: '1.1rem', sm: '1.5rem' },
+                                fontFamily: 'Poppins, sans-serif',
+                                color: '#525252',
+                                fontWeight: 400,
+                                fontSize: { xs: '0.9rem', sm: '1rem' },
+                                lineHeight: 1.4,
                               }}
                             >
-                              {car.price}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: 'text.secondary',
-                                ml: 1,
-                                display: 'inline',
-                                fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                              }}
-                            >
-                              {car.duration}
+                              Rent: {car.price} / {car.duration}
                             </Typography>
                           </Box>
 
@@ -281,10 +299,14 @@ const FleetSection = () => {
                             variant="contained"
                             fullWidth
                             sx={{
+                              backgroundColor: '#52A4C1',
                               borderRadius: 2,
                               py: 1.5,
                               fontWeight: 'bold',
                               textTransform: 'none',
+                              '&:hover': {
+                                backgroundColor: '#4A8FA8',
+                              },
                             }}
                           >
                             Book Now
@@ -298,7 +320,7 @@ const FleetSection = () => {
 
               {/* Dots Indicator */}
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, gap: 1 }}>
-                {Array.from({ length: Math.max(1, fleet.length - 2) }).map((_, index) => (
+                {Array.from({ length: Math.max(1, fleet.length - 3) }).map((_, index) => (
                   <Box
                     key={index}
                     onClick={() => setCurrentIndex(index)}
@@ -306,43 +328,19 @@ const FleetSection = () => {
                       width: 12,
                       height: 12,
                       borderRadius: '50%',
-                      backgroundColor: index === currentIndex ? 'primary.main' : 'grey.300',
+                      backgroundColor: index === currentIndex ? '#52A4C1' : 'grey.300',
                       cursor: 'pointer',
                       transition: 'all 0.3s',
                       '&:hover': {
-                        backgroundColor: index === currentIndex ? 'primary.dark' : 'grey.400',
+                        backgroundColor: index === currentIndex ? '#4A8FA8' : 'grey.400',
                       },
                     }}
                   />
                 ))}
               </Box>
             </Box>
-
-            {/* Mobile Navigation Dots */}
-            {isMobile && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, gap: 1 }}>
-                {Array.from({ length: Math.max(1, fleet.length - 2) }).map((_, index) => (
-                  <Box
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    sx={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: '50%',
-                      backgroundColor: currentIndex === index ? 'primary.main' : 'grey.300',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.3s',
-                      '&:hover': {
-                        backgroundColor: currentIndex === index ? 'primary.dark' : 'grey.400',
-                      },
-                    }}
-                  />
-                ))}
-              </Box>
-            )}
           </Box>
         </Fade>
-      </Container>
     </Box>
   );
 };

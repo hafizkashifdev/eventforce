@@ -68,7 +68,6 @@ Downloaded on: ${new Date().toLocaleDateString()}`;
       px: 2,
       py: { xs: 2, sm: 0 }
     }}>
-      <Container maxWidth="lg">
         <Fade in={visible} timeout={700}>
           <Box
             sx={{
@@ -79,6 +78,7 @@ Downloaded on: ${new Date().toLocaleDateString()}`;
               gap: { xs: 2, sm: 0 },
               height: '100%',
               minHeight: { xs: 'auto', sm: 92 },
+              width: '100%',
             }}
           >
             <Typography
@@ -125,8 +125,7 @@ Downloaded on: ${new Date().toLocaleDateString()}`;
             </Button>
           </Box>
         </Fade>
-      </Container>
-    </Box>
+      </Box>
   );
 };
 
