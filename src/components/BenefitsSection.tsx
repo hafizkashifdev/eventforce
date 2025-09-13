@@ -31,42 +31,42 @@ const BenefitsSection = () => {
     {
       icon: <OnTimeGuaranteeIcon />,
       title: 'On-Time Guarantee',
-      backgroundColor: '#F7941D'
+      backgroundColor: '#FEF3E6'
     },
     {
       icon: <LuxuryFleetIcon />,
       title: 'Luxury Fleet',
-      backgroundColor: '#67B6B2'
+      backgroundColor: '#EEF7F7'
     },
     {
       icon: <RealTimeGPSTrackingIcon />,
       title: 'Real-Time GPS Tracking',
-      backgroundColor: '#F7941D'
+      backgroundColor: '#FEF3E6'
     },
     {
       icon: <InCarWiFiIcon />,
       title: 'In-Car Wi-Fi',
-      backgroundColor: '#67B6B2'
+      backgroundColor: '#EEF7F7'
     },
     {
       icon: <CleanComfyIcon />,
       title: 'Clean & Comfy',
-      backgroundColor: '#F7941D'
+      backgroundColor: '#FEF3E6'
     },
     {
       icon: <CustomerSupportIcon />,
       title: '24/7 Customer Support',
-      backgroundColor: '#67B6B2'
+      backgroundColor: '#EEF7F7'
     },
     {
       icon: <EasyOnlineBookingIcon />,
       title: 'Easy Online Booking',
-      backgroundColor: '#F7941D'
+      backgroundColor: '#FEF3E6'
     },
     {
       icon: <TrainedDriversIcon />,
       title: 'Trained Drivers',
-      backgroundColor: '#67B6B2'
+      backgroundColor: '#EEF7F7'
     }
   ];
 
