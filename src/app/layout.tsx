@@ -53,13 +53,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Event Force - Premium Transportation & Event Logistics",
     description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
-    url: `https://eventforce.sa.netlify.app/.netlify.app/`,
+    url: `https://eventforcesa.netlify.app/.netlify.app/`,
     type: "website",
     locale: "en_US",
     siteName: "Event Force",
     images: [
       {
-        url: `https://eventforce.sa.netlify.app/.netlify.app/og.png`,
+        url: `https://eventforcesa.netlify.app/.netlify.app/og.png`,
         type: "image/png",
         width: 1200,
         height: 630,
