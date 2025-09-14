@@ -2,10 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Box,
   Typography,
-  Container,
   Grid,
   Link as MuiLink,
   useMediaQuery,
@@ -18,6 +18,7 @@ import {
   YouTube,
   WhatsApp,
 } from '@mui/icons-material';
+import { LogoEventForce } from '@/assets/images';
 
 const Footer = () => {
   const isMobile = useMediaQuery('(max-width:900px)');
@@ -57,34 +58,25 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: 'grey.900',
+        backgroundColor: '#000000',
         color: 'white',
         py: 8,
       }}
     >
-      <Container maxWidth="lg">
+      <Box sx={{ px: 1.5, maxWidth: { xs: '100%', xl: '1200px' }, mx: 'auto' }}>
         <Grid container spacing={6}>
           {/* Logo and Description */}
           <Grid size={{ xs: 12, md: 6, lg: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-              <Box
-                sx={{
-                  width: 40,
-                  height: 40,
-                  background: 'linear-gradient(45deg, #1976d2, #1565c0)',
-                  borderRadius: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Image
+                src={LogoEventForce}
+                alt="Event Force Logo"
+                width={168}
+                height={51}
+                style={{
+                  objectFit: 'contain',
                 }}
-              >
-                <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
-                  EF
-                </Typography>
-              </Box>
-              <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Event Force
-              </Typography>
+              />
             </Box>
             <Typography
               variant="body2"
@@ -218,7 +210,21 @@ const Footer = () => {
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2">+966 59 427 9012</Typography>
+              <MuiLink
+                href="https://wa.me/966594279012"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: 'grey.400',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    color: '#25D366',
+                  },
+                  transition: 'color 0.3s',
+                }}
+              >
+                <Typography variant="body2">+966 59 427 9012</Typography>
+              </MuiLink>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography variant="body2">Reservations@eventforce.sa.com</Typography>
@@ -231,7 +237,7 @@ const Footer = () => {
             © {currentYear} Event Force. All rights reserved.
           </Typography>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 };

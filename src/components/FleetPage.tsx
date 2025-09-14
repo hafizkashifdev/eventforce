@@ -127,41 +127,6 @@ const FleetPage = () => {
   return (
     <Box sx={{ py: 10, backgroundColor: 'grey.50' }}>
       <Container maxWidth="lg">
-        {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography
-            variant="h2"
-            component="h1"
-            sx={{
-              fontWeight: 'bold',
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            Our Fleet
-          </Typography>
-          <Box
-            sx={{
-              width: 60,
-              height: 4,
-              backgroundColor: 'primary.main',
-              mx: 'auto',
-              mb: 4,
-            }}
-          />
-          <Typography
-            variant="h6"
-            sx={{
-              color: 'text.secondary',
-              maxWidth: '800px',
-              mx: 'auto',
-              lineHeight: 1.6,
-            }}
-          >
-            Browse rental car fleet in Saudi Arabia, featuring modern, reliable vehicles for every need. 
-            Choose from Economy, SUVs, luxury cars, and Buses available for daily or monthly rental in Riyadh & Jeddah
-          </Typography>
-        </Box>
 
         {/* Filters */}
         <Box sx={{ mb: 6 }}>

@@ -7,19 +7,17 @@ import {
   Container,
   Grid,
   Card,
-  CardContent,
   TextField,
   Button,
-  useMediaQuery,
-  Fade,
   CircularProgress,
+  IconButton,
 } from '@mui/material';
 import {
-  Phone as PhoneIcon,
-  Email as EmailIcon,
-  LocationOn as LocationIcon,
-  Business as BusinessIcon,
-} from '@mui/icons-material';
+  MobileIcon,
+  EmailIcon,
+  LocationIcon,
+  WhatsAppIcon,
+} from './icons';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +26,6 @@ const ContactSection = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isMobile = useMediaQuery('(max-width:900px)');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,7 +35,7 @@ const ContactSection = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -51,232 +48,387 @@ const ContactSection = () => {
   };
 
   return (
-    <Box sx={{ py: 10, backgroundColor: 'grey.50' }}>
-      <Container maxWidth="lg">
-        <Fade in timeout={700}>
-          <Grid container spacing={6}>
-            {/* Contact Information */}
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <Card
-                sx={{
-                  backgroundColor: 'grey.900',
-                  color: 'white',
-                  height: '100%',
-                  p: 4,
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    variant={isMobile ? 'h4' : 'h3'}
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                      mb: 4,
-                      color: 'white',
-                    }}
-                  >
-                    Contact Us
+    <Box sx={{ py: 10, px: 4, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+      <Grid container sx={{ position: 'relative', minHeight: { xs: 'auto', lg: '500px' }, width: '100%' }}>
+
+          {/* Contact Us Card - Left side */}
+          <Grid size={{ xs: 12, lg: 5 }} sx={{ zIndex: 2, position: { xs: 'relative', lg: 'absolute' }, top: { xs: 0, lg: 140 }, left: 0, height: { xs: 'auto', lg: '392px' } }}>
+            <Card sx={{
+              backgroundColor: '#000000',
+              color: '#FFFFFF',
+              p: { xs: 4, lg: 6 },
+              height: '100%',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              borderRadius: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 2
+            }}>
+              <Box>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                    mb: 4,
+                    fontFamily: 'Poppins, sans-serif',
+                  }}
+                >
+                  Contact Us
+                </Typography>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <IconButton size="small" sx={{ color: '#52A4C1', mr: 2 }}>
+                    <MobileIcon />
+                  </IconButton>
+                  <Typography variant="body1" sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif' }}>
+                    +966 59 427 9012
                   </Typography>
+                </Box>
 
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    {/* Phone */}
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                      <Box
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          backgroundColor: 'primary.main',
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <PhoneIcon sx={{ color: 'white' }} />
-                      </Box>
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                          Phone
-                        </Typography>
-                        <Typography sx={{ color: 'grey.300' }}>
-                          +966 59 427 9012
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {/* Email */}
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                      <Box
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          backgroundColor: 'primary.main',
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <EmailIcon sx={{ color: 'white' }} />
-                      </Box>
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                          Email
-                        </Typography>
-                        <Typography sx={{ color: 'grey.300' }}>
-                          Reservations@eventforce.sa.com
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {/* Headquarters */}
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                      <Box
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          backgroundColor: 'primary.main',
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <LocationIcon sx={{ color: 'white' }} />
-                      </Box>
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                          Headquarters
-                        </Typography>
-                        <Typography sx={{ color: 'grey.300' }}>
-                          White Space 2444 Taha Khasiyfan - Ash Shati Dist.<br />
-                          Unit No 4707 Jeddah 23511
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {/* Branch */}
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                      <Box
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          backgroundColor: 'primary.main',
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <BusinessIcon sx={{ color: 'white' }} />
-                      </Box>
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                          Branch Office
-                        </Typography>
-                        <Typography sx={{ color: 'grey.300' }}>
-                          White Space, King Abdullah Dt.<br />
-                          Riyadh 12211, Saudi Arabia
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Contact Form */}
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <Card sx={{ height: '100%' }}>
-                <CardContent sx={{ p: 4 }}>
-                  <Typography
-                    variant={isMobile ? 'h4' : 'h3'}
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                      color: 'text.primary',
-                      mb: 2,
-                    }}
-                  >
-                    Love to hear from you
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <IconButton size="small" sx={{ color: '#52A4C1', mr: 2 }}>
+                    <EmailIcon />
+                  </IconButton>
+                  <Typography variant="body1" sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif' }}>
+                    Reservations@eventforce.sa.com
                   </Typography>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      color: 'primary.main',
-                      fontWeight: 'bold',
-                      mb: 4,
-                    }}
-                  >
-                    Get in touch!
-                  </Typography>
+                </Box>
 
-                  <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
+                  <IconButton size="small" sx={{ color: '#52A4C1', mr: 2, mt: '2px' }}>
+                    <LocationIcon />
+                  </IconButton>
+                  <Typography variant="body1" sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif' }}>
+                    <Box component="span" sx={{ fontWeight: 'bold' }}>Head Quarter:</Box><br />
+                    White Space 2444 Taha Khasiyfan - Ash Shati Dist. Unit No 4707 Jeddah 23511
+                    <br />
+                    <Box component="span" sx={{ fontWeight: 'bold' }}>Branch:</Box><br />
+                    White Space, King Abdullah Dt. Riyadh 12211, Saudi Arabia
+                  </Typography>
+                </Box>
+              </Box>
+              
+              {/* <Box sx={{ display: 'flex', gap: 2, mt: 'auto', p: 1 }}>
+                <IconButton sx={{ color: '#52A4C1' }}>
+                  <WhatsAppIcon />
+                </IconButton>
+                <IconButton sx={{ color: '#52A4C1' }}>
+                  <MobileIcon />
+                </IconButton>
+                <IconButton sx={{ color: '#52A4C1' }}>
+                  <EmailIcon />
+                </IconButton>
+              </Box> */}
+            </Card>
+          </Grid>
+
+          {/* Contact Form Card - Right side with overlap */}
+          <Grid size={{ xs: 12, lg: 10}} sx={{ ml: { xs: 0, lg: 'auto' }, mt: { xs: 2, lg: 6 }, zIndex: 1, position: 'relative' }}>
+            <Card sx={{
+              p: { xs: 4, lg: 6 },
+              backgroundColor: '#FFFFFF',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              borderRadius: 2,
+              height: '100%',
+            
+            }}>
+              <Box component="form" onSubmit={handleSubmit} sx={{ display: { xs: 'block', lg: 'none' } }}>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                    mb: 1,
+                    fontFamily: 'Poppins, sans-serif',
+                    color: '#333333'
+                  }}
+                >
+                  Love to hear from you
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: '#666666',
+                    mb: 4,
+                    fontFamily: 'Poppins, sans-serif',
+                  }}
+                >
+                  Get in touch!
+                </Typography>
+                
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
+                      }}
+                    >
+                      Your Name *
+                    </Typography>
                     <TextField
                       fullWidth
-                      label="Your Name *"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      sx={{ mb: 3 }}
+                      placeholder="Enter your full name"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
                     />
-
+                  </Box>
+                  
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
+                      }}
+                    >
+                      Your Email *
+                    </Typography>
                     <TextField
                       fullWidth
-                      label="Your Email *"
                       name="email"
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      sx={{ mb: 3 }}
+                      placeholder="Enter your email address"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
                     />
-
+                  </Box>
+                  
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
+                      }}
+                    >
+                      Message *
+                    </Typography>
                     <TextField
                       fullWidth
-                      label="Message *"
                       name="message"
                       multiline
                       rows={5}
                       value={formData.message}
                       onChange={handleInputChange}
                       required
-                      sx={{ mb: 4 }}
-                    />
-
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                      disabled={isSubmitting}
+                      placeholder="Enter your message here"
                       sx={{
-                        py: 2,
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
+                    />
+                  </Box>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    disabled={isSubmitting}
+                    sx={{
+                      backgroundColor: '#52A4C1',
+                      borderRadius: 1,
+                      py: 2,
+                      textTransform: 'none',
+                      fontWeight: 'bold',
+                      fontFamily: 'Poppins, sans-serif',
+                      fontSize: '16px',
+                      '&:hover': {
+                        backgroundColor: '#4A8FA8',
+                      },
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
+                        <CircularProgress size={20} color="inherit" />
+                        <span>Sending Message...</span>
+                      </Box>
+                    ) : (
+                      'Send Message'
+                    )}
+                  </Button>
+                </Box>
+              </Box>
+
+              <Grid container sx={{ display: { xs: 'none', lg: 'flex' } }}>
+                <Grid size={{ xs: 12, lg: 5}}>
+                  <Box>
+                    
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, lg: 7}}>
+                  <Box component="form" onSubmit={handleSubmit}>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                    mb: 1,
+                    fontFamily: 'Poppins, sans-serif',
+                    color: '#333333'
+                  }}
+                >
+                  Love to hear from you
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: '#666666',
+                    mb: 4,
+                    fontFamily: 'Poppins, sans-serif',
+                  }}
+                >
+                  Get in touch!
+                </Typography>
+                
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
                         fontWeight: 'bold',
-                        textTransform: 'none',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
                       }}
                     >
-                      {isSubmitting ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <CircularProgress size={20} color="inherit" />
-                          <span>Sending Message...</span>
-                        </Box>
-                      ) : (
-                        'Send Message'
-                      )}
-                    </Button>
+                      Your Name *
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter your full name"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
+                    />
                   </Box>
-                </CardContent>
-              </Card>
-            </Grid>
+                  
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
+                      }}
+                    >
+                      Your Email *
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter your email address"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
+                    />
+                  </Box>
+                  
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        mb: 1,
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#333333'
+                      }}
+                    >
+                      Message *
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      name="message"
+                      multiline
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter your message here"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: '#F5F5F5',
+                          borderRadius: 1,
+                        },
+                      }}
+                    />
+                  </Box>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    disabled={isSubmitting}
+                    sx={{
+                      backgroundColor: '#52A4C1',
+                      borderRadius: 1,
+                      py: 2,
+                      textTransform: 'none',
+                      fontWeight: 'bold',
+                      fontFamily: 'Poppins, sans-serif',
+                      fontSize: '16px',
+                      '&:hover': {
+                        backgroundColor: '#4A8FA8',
+                      },
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
+                        <CircularProgress size={20} color="inherit" />
+                        <span>Sending Message...</span>
+                      </Box>
+                    ) : (
+                      'Send Message'
+                    )}
+                  </Button>
+                </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Card>
           </Grid>
-        </Fade>
-      </Container>
+      </Grid>
     </Box>
   );
 };

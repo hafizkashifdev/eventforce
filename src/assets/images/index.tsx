@@ -27,3 +27,10 @@ export { default as LogoEventForce } from './logo-event-force.png';
 
 // Auth Images
 export { default as AuthBg } from './auth-bg.png';
+
+// About Images
+export { default as AboutBg } from './about-bg.png';
+export { default as AboutTeam } from './team-img-about.png';
+
+// Fleet Images
+export { default as FleetBg } from './fleet.png';

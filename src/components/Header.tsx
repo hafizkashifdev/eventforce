@@ -50,8 +50,8 @@ const Header = () => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
+    <Box sx={{ width: '100%', height: '100%', backgroundColor: '#000000' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 3, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Image
             src={LogoEventForce}
@@ -63,41 +63,61 @@ const Header = () => {
             }}
           />
         </Box>
-        <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
+        <IconButton 
+          onClick={handleDrawerToggle} 
+          sx={{ 
+            color: '#52A4C1',
+            backgroundColor: 'rgba(82, 164, 193, 0.1)',
+            '&:hover': {
+              backgroundColor: 'rgba(82, 164, 193, 0.2)',
+            }
+          }}
+        >
           <CloseIcon />
         </IconButton>
       </Box>
-      <List>
-        {navigation.map((item) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton
-              component={Link}
-              href={item.href}
-              selected={pathname === item.href}
-              onClick={handleDrawerToggle}
-              sx={{
-                '&.Mui-selected': {
-                  backgroundColor: alpha('#52A4C1', 0.1),
-                  '& .MuiListItemText-primary': {
-                    color: '#52A4C1',
-                    fontFamily: 'Poppins, sans-serif',
-                    fontWeight: 'bold',
-                    fontSize: '16px',
+      <Box sx={{ p: 3 }}>
+        <List sx={{ gap: 1 }}>
+          {navigation.map((item) => (
+            <ListItem key={item.name} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton
+                component={Link}
+                href={item.href}
+                selected={pathname === item.href}
+                onClick={handleDrawerToggle}
+                sx={{
+                  borderRadius: 2,
+                  py: 2,
+                  px: 3,
+                  '&.Mui-selected': {
+                    backgroundColor: '#52A4C1',
+                    '& .MuiListItemText-primary': {
+                      color: '#FFFFFF',
+                      fontFamily: 'Poppins, sans-serif',
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                    },
+                    '&:hover': {
+                      backgroundColor: '#4A8FA8',
+                    },
                   },
-                },
-                '& .MuiListItemText-primary': {
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 600,
-                  fontSize: '16px',
-                  color: 'white',
-                },
-              }}
-            >
-              <ListItemText primary={item.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem sx={{ pt: 2 }}>
+                  '&:hover': {
+                    backgroundColor: 'rgba(82, 164, 193, 0.1)',
+                  },
+                  '& .MuiListItemText-primary': {
+                    fontFamily: 'Poppins, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '18px',
+                    color: '#FFFFFF',
+                  },
+                }}
+              >
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <Button
             component={Link}
             href="/signin"
@@ -106,21 +126,26 @@ const Header = () => {
             onClick={handleDrawerToggle}
             sx={{
               backgroundColor: '#52A4C1',
-              borderRadius: '8px',
-              height: '48px',
-              py: '10px',
+              borderRadius: '12px',
+              height: '56px',
+              py: '12px',
               px: '24px',
-              fontSize: '16px',
+              fontSize: '18px',
               fontWeight: 'bold',
+              textTransform: 'none',
+              boxShadow: '0 4px 12px rgba(82, 164, 193, 0.3)',
               '&:hover': {
                 backgroundColor: '#4A8FA8',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 16px rgba(82, 164, 193, 0.4)',
               },
+              transition: 'all 0.3s ease',
             }}
           >
             Login/Register
           </Button>
-        </ListItem>
-      </List>
+        </Box>
+      </Box>
     </Box>
   );
 
@@ -135,8 +160,8 @@ const Header = () => {
           transition: 'all 0.3s ease',
         }}
       >
-        <Container maxWidth="lg">
-          <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+        <Box sx={{ px: 1.5 }}>
+          <Toolbar sx={{ justifyContent: 'space-between', py: 1, maxWidth: { xs: '100%', xl: '1200px' }, mx: 'auto' }}>
             {/* Logo */}
             <Box
               component={Link}
@@ -231,13 +256,13 @@ const Header = () => {
               <MenuIcon />
             </IconButton>
           </Toolbar>
-        </Container>
+        </Box>
       </AppBar>
 
       {/* Mobile Drawer */}
       <Drawer
         variant="temporary"
-        anchor="right"
+        anchor="top"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
@@ -247,7 +272,9 @@ const Header = () => {
           display: { xs: 'block', lg: 'none' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
-            width: 250,
+            width: '100%',
+            height: '100vh',
+            backgroundColor: '#000000',
           },
         }}
       >

@@ -32,12 +32,6 @@ const theme = createTheme({
         },
       },
     },
-    // Ensure consistent styling for MUI components
-    MuiBox: {
-      defaultProps: {
-        // Add any default props that might help with consistency
-      },
-    },
   },
 });
 
