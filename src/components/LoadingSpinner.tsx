@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, SxProps, Theme } from '@mui/material';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -14,7 +14,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 40,
   fullScreen = false 
 }) => {
-  const containerSx = fullScreen 
+  const containerSx: SxProps<Theme> = fullScreen 
     ? {
         position: 'fixed',
         top: 0,
