@@ -22,6 +22,7 @@ import {
   EasyOnlineBookingIcon,
   TrainedDriversIcon,
 } from './icons';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const BenefitsSection = () => {
   const [visible, setVisible] = useState(false);
@@ -78,43 +79,46 @@ const BenefitsSection = () => {
   return (
     <Box sx={{ my:4, px:2,backgroundColor: '#FFFFFF' }}>
       {/* <Container> */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography
-            variant={isMobile ? 'h4' : 'h3'}
-            component="h2"
-            sx={{
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 'bold',
-              fontSize: '36px',
-              color: '#525252',
-              mb: 2,
-              position: 'relative',
-              display: 'inline-block',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                bottom: '-8px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '60px',
-                height: '4px',
-                backgroundColor: '#52A4C1',
-                borderRadius: '2px',
-              },
-            }}
-          >
-            Benefits
-          </Typography>
-        </Box>
+        <SlideUpInView initialY={60} duration={0.8}>
+          <Box sx={{ textAlign: 'center', mb: 8 }}>
+            <Typography
+              variant={isMobile ? 'h4' : 'h3'}
+              component="h2"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                fontWeight: 'bold',
+                fontSize: '36px',
+                color: '#525252',
+                mb: 2,
+                position: 'relative',
+                display: 'inline-block',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: '-8px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '60px',
+                  height: '4px',
+                  backgroundColor: '#52A4C1',
+                  borderRadius: '2px',
+                },
+              }}
+            >
+              Benefits
+            </Typography>
+          </Box>
+        </SlideUpInView>
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
           {benefits.map((benefit, index) => (
-            <Box key={index}>
-              <Grow
-                in={visible}
-                timeout={700 + index * 100}
-                style={{ transformOrigin: '0 0 0' }}
-              >
+            <ScaleInView key={index} initialScale={0.8} duration={0.6} delay={index * 0.1}>
+              <Box>
+                <Grow
+                  in={visible}
+                  timeout={700 + index * 100}
+                  style={{ transformOrigin: '0 0 0' }}
+                >
                   <Card
                     sx={{
                       width: '100%',
@@ -165,7 +169,8 @@ const BenefitsSection = () => {
                   </CardContent>
                 </Card>
               </Grow>
-            </Box>
+              </Box>
+            </ScaleInView>
           ))}
         </Box>
       {/* </Container> */}

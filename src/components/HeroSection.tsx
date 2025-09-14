@@ -15,21 +15,30 @@ import {
 import { WhatsApp as WhatsAppIcon, ArrowUpward as ArrowUpwardIcon } from '@mui/icons-material';
 import { HeroImages } from '@/assets/images';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width:900px)');
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      if (heroRef.current) {
-        const scrolled = window.pageYOffset;
-        const parallax = scrolled * 0.5;
-        heroRef.current.style.transform = `translateY(${parallax}px)`;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (heroRef.current) {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.5;
+            heroRef.current.style.transform = `translateY(${parallax}px)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -101,9 +110,10 @@ const HeroSection = () => {
         >
           <Image
             src={HeroImages.src || HeroImages}
-            alt="Event Force Hero Background"
+            alt="Event Force Hero Background - Premium Transportation Services"
             fill
             priority
+            quality={85}
             style={{ 
               objectFit: 'cover',
               objectPosition: 'center center'
@@ -227,73 +237,78 @@ const HeroSection = () => {
            sx={{
              textAlign: 'center',
              color: 'white',
-             py: { xs: 4, sm: 6, },
+             py: { xs: 4, sm: 4, },
              px: { xs: 2, sm: 3, md: 4 },
              width: '100%',
            }}
          >
            {/* Main Title */}
-           <Typography
-             variant={isMobile ? 'h3' : 'h1'}
-             component="h1"
-             sx={{
-               fontFamily: 'Montserrat, sans-serif',
-               fontWeight: 600,
-               mb: { xs: 3, sm: 4, md: 4 },
-               lineHeight: 1.2,
-               fontSize: { 
-                 xs: '2.5rem', 
-                 sm: '3rem', 
-                 md: '4rem', 
-                 lg: '5rem',
-                 xl: '60px'
-               },
-               '& .gradient-text': {
-                 background: 'linear-gradient(45deg, #64b5f6, #1976d2)',
-                 backgroundClip: 'text',
-                 WebkitBackgroundClip: 'text',
-                 WebkitTextFillColor: 'transparent',
-               },
-             }}
-           >
-             <Box component="span" display="block">
-               Premium Transportation
-             </Box>
-             <Box component="span" display="block" sx={{ color: 'white' }}>
-               & Event Logistics
-             </Box>
-           </Typography>
+           <SlideUpInView initialY={80} duration={0.8}>
+             <Typography
+               variant={isMobile ? 'h3' : 'h1'}
+               component="h1"
+               sx={{
+                 fontFamily: 'Montserrat, sans-serif',
+                 fontWeight: 600,
+                 mb: { xs: 3, sm: 4, md: 4 },
+                 lineHeight: 1.2,
+                 fontSize: { 
+                   xs: '2.5rem', 
+                   sm: '3rem', 
+                   md: '4rem', 
+                   lg: '5rem',
+                   xl: '60px'
+                 },
+                 '& .gradient-text': {
+                   background: 'linear-gradient(45deg, #64b5f6, #1976d2)',
+                   backgroundClip: 'text',
+                   WebkitBackgroundClip: 'text',
+                   WebkitTextFillColor: 'transparent',
+                 },
+               }}
+             >
+               <Box component="span" display="block">
+                 Premium Transportation
+               </Box>
+               <Box component="span" display="block" sx={{ color: 'white' }}>
+                 & Event Logistics
+               </Box>
+             </Typography>
+           </SlideUpInView>
 
            {/* Subtitle */}
-           <Typography
-             variant={isMobile ? 'h6' : 'h5'}
-             sx={{
-               fontFamily: 'Poppins, sans-serif',
-               fontWeight: 300,
-               mb: { xs: 4, sm: 5, md: 6 },
-               maxWidth: { xs: '100%', sm: '90%', md: '800px' },
-               mx: 'auto',
-               opacity: 0.9,
-               lineHeight: '25px',
-               fontSize: '20px',
-               letterSpacing: '0.5px',
-             }}
-           >
-             From luxury VIP vehicles to large-scale event logistics, we provide seamless, 
-             reliable, and premium transportation solutions that elevate every occasion.
-           </Typography>
+           <SlideUpInView initialY={60} duration={0.9} delay={0.2}>
+             <Typography
+               variant={isMobile ? 'h6' : 'h5'}
+               sx={{
+                 fontFamily: 'Poppins, sans-serif',
+                 fontWeight: 300,
+                 mb: { xs: 4, sm: 5, md: 6 },
+                 maxWidth: { xs: '100%', sm: '90%', md: '800px' },
+                 mx: 'auto',
+                 opacity: 0.9,
+                 lineHeight: '25px',
+                 fontSize: '20px',
+                 letterSpacing: '0.5px',
+               }}
+             >
+               From luxury VIP vehicles to large-scale event logistics, we provide seamless, 
+               reliable, and premium transportation solutions that elevate every occasion.
+             </Typography>
+           </SlideUpInView>
 
            {/* CTA Buttons */}
-           <Box
-             sx={{
-               display: 'flex',
-               flexDirection: { xs: 'column', sm: 'row' },
-               gap: { xs: 2, sm: 3, md: 3 },
-               justifyContent: 'center',
-               alignItems: 'center',
-               pt: { xs: 2, sm: 3, md: 4 },
-             }}
-           >
+           <SlideUpInView initialY={40} duration={1.0} delay={0.4}>
+             <Box
+               sx={{
+                 display: 'flex',
+                 flexDirection: { xs: 'column', sm: 'row' },
+                 gap: { xs: 2, sm: 3, md: 3 },
+                 justifyContent: 'center',
+                 alignItems: 'center',
+                 pt: { xs: 2, sm: 3, md: 4 },
+               }}
+             >
              <Button
                component={Link}
                href="/our-fleet"
@@ -347,13 +362,22 @@ const HeroSection = () => {
                Learn More
                <ArrowUpwardIcon sx={{ fontSize: '16px', transform: 'rotate(45deg)' }} />
              </Button>
-           </Box>
+             </Box>
+           </SlideUpInView>
         </Box>
       </Container>
 
       {/* Floating WhatsApp Button */}
       <Fab
         color="success"
+        aria-label="Contact us on WhatsApp"
+        onClick={() => {
+          // WhatsApp redirect with the exact number from footer: +966 59 427 9012
+          const phoneNumber = '966594279012'; // +966 59 427 9012 from footer
+          const message = 'Hello! I would like to know more about Event Force services.';
+          const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+        }}
         sx={{
           position: 'fixed',
           bottom: 24,
@@ -363,6 +387,7 @@ const HeroSection = () => {
             transform: 'scale(1.1)',
           },
           transition: 'transform 0.3s',
+          cursor: 'pointer',
         }}
       >
         <WhatsAppIcon />

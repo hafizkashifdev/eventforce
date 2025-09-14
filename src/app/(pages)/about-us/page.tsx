@@ -9,6 +9,7 @@ import DownloadProfile from '@/components/DownloadProfile'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import AboutBg from '@/assets/images/about-bg.png'
 import { AboutTeam } from '@/assets/images'
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations'
 
 const AboutUsPage = () => {
   return (
@@ -78,31 +79,35 @@ const AboutUsPage = () => {
               maxWidth: { xs: '100%', md: '600px' },
               flex: 1
             }}>
-              <Typography 
-                variant="h2" 
-                component="h1" 
-                sx={{ 
-                  fontWeight: 'bold', 
-                  mb: 4,
-                  color: 'white',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
-                }}
-              >
-                About Event Force
-              </Typography>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  color: 'rgba(255,255,255,0.9)', 
-                  lineHeight: 1.6,
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }
-                }}
-              >
-                We are Saudi Arabia's premier transportation and event logistics company, 
-                dedicated to providing exceptional service and luxury experiences.
-              </Typography>
+              <SlideUpInView initialY={60} duration={0.8}>
+                <Typography 
+                  variant="h2" 
+                  component="h1" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    mb: 4,
+                    color: 'white',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                  }}
+                >
+                  About Event Force
+                </Typography>
+              </SlideUpInView>
+              <SlideUpInView initialY={40} duration={0.9} delay={0.2}>
+                <Typography 
+                  variant="h5" 
+                  sx={{ 
+                    color: 'rgba(255,255,255,0.9)', 
+                    lineHeight: 1.6,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                    fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }
+                  }}
+                >
+                  We are Saudi Arabia's premier transportation and event logistics company, 
+                  dedicated to providing exceptional service and luxury experiences.
+                </Typography>
+              </SlideUpInView>
             </Box>
 
              {/* Single Circular Team Image - Right Side */}
@@ -115,33 +120,35 @@ const AboutUsPage = () => {
                position: 'relative',
                minHeight: '300px'
              }}>
-               {/* Single Circle - Team Image */}
-               <Box
-                 sx={{
-                   position: 'relative',
-                   width: { md: '250px', lg: '300px' },
-                   height: { md: '250px', lg: '300px' },
-                   borderRadius: '50%',
-                   overflow: 'hidden',
-                   border: '4px solid #00bcd4',
-                   boxShadow: '0 0 25px rgba(0, 188, 212, 0.6)',
-                   zIndex: 2,
-                   transition: 'transform 0.3s ease',
-                   '&:hover': {
-                     transform: 'scale(1.05)'
-                   }
-                 }}
-               >
-                 <Image
-                   src={AboutTeam}
-                   alt="Event Force Team"
-                   fill
-                   style={{
-                     objectFit: 'cover',
-                     objectPosition: 'center'
+               <ScaleInView initialScale={0.8} duration={1.0} delay={0.4}>
+                 {/* Single Circle - Team Image */}
+                 <Box
+                   sx={{
+                     position: 'relative',
+                     width: { md: '250px', lg: '300px' },
+                     height: { md: '250px', lg: '300px' },
+                     borderRadius: '50%',
+                     overflow: 'hidden',
+                     border: '4px solid #00bcd4',
+                     boxShadow: '0 0 25px rgba(0, 188, 212, 0.6)',
+                     zIndex: 2,
+                     transition: 'transform 0.3s ease',
+                     '&:hover': {
+                       transform: 'scale(1.05)'
+                     }
                    }}
-                 />
-               </Box>
+                 >
+                   <Image
+                     src={AboutTeam}
+                     alt="Event Force Team"
+                     fill
+                     style={{
+                       objectFit: 'cover',
+                       objectPosition: 'center'
+                     }}
+                   />
+                 </Box>
+               </ScaleInView>
              </Box>
           </Box>
         </Container>

@@ -27,6 +27,9 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          overflowY: 'scroll', // Prevent layout shift when scrollbar is hidden
+        },
         body: {
           fontFamily: 'var(--font-outfit), Arial, Helvetica, sans-serif',
         },

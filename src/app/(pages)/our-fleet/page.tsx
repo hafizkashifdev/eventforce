@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import FleetPage from '@/components/FleetPage'
 import Footer from '@/components/Footer'
 import { FleetBg } from '@/assets/images'
+import { SlideUpInView } from '@/components/animations'
 
 const OurFleetPage = () => {
     return (
@@ -65,33 +66,37 @@ const OurFleetPage = () => {
                 
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
                     <Box sx={{ textAlign: 'center' }}>
-                        <Typography 
-                            variant="h2" 
-                            component="h1" 
-                            sx={{ 
-                                fontWeight: 'bold', 
-                                mb: 4,
-                                color: 'white',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
-                            }}
-                        >
-                            Our Fleet
-                        </Typography>
-                        <Typography 
-                            variant="h5" 
-                            sx={{ 
-                                color: 'rgba(255,255,255,0.9)', 
-                                lineHeight: 1.6,
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
-                                maxWidth: '800px',
-                                mx: 'auto'
-                            }}
-                        >
-                            Browse our extensive fleet of modern, reliable vehicles for every need. 
-                            Choose from Economy, SUVs, luxury cars, and buses available for daily or monthly rental.
-                        </Typography>
+                        <SlideUpInView initialY={60} duration={0.8}>
+                            <Typography 
+                                variant="h2" 
+                                component="h1" 
+                                sx={{ 
+                                    fontWeight: 'bold', 
+                                    mb: 4,
+                                    color: 'white',
+                                    textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                                }}
+                            >
+                                Our Fleet
+                            </Typography>
+                        </SlideUpInView>
+                        <SlideUpInView initialY={40} duration={0.9} delay={0.2}>
+                            <Typography 
+                                variant="h5" 
+                                sx={{ 
+                                    color: 'rgba(255,255,255,0.9)', 
+                                    lineHeight: 1.6,
+                                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                                    fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+                                    maxWidth: '800px',
+                                    mx: 'auto'
+                                }}
+                            >
+                                Browse our extensive fleet of modern, reliable vehicles for every need. 
+                                Choose from Economy, SUVs, luxury cars, and buses available for daily or monthly rental.
+                            </Typography>
+                        </SlideUpInView>
                     </Box>
                 </Container>
             </Box>

@@ -14,6 +14,7 @@ import {
   ClientHassanRaza, 
   ClientMariamKhan
 } from '@/assets/images';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -83,19 +84,21 @@ const TestimonialsSection = () => {
               justifyContent: 'center', 
               mb: 6
             }}>
-              <Typography
-                variant={isMobile ? 'h4' : 'h3'}
-                component="h2"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: { xs: '24px', sm: '32px' },
-                  color: '#333333',
-                  textAlign: 'center',
-                }}
-              >
-                What Our Clients Say About Us
-              </Typography>
+              <SlideUpInView initialY={60} duration={0.8}>
+                <Typography
+                  variant={isMobile ? 'h4' : 'h3'}
+                  component="h2"
+                  sx={{
+                    fontFamily: 'Poppins, sans-serif',
+                    fontWeight: 'bold',
+                    fontSize: { xs: '24px', sm: '32px' },
+                    color: '#333333',
+                    textAlign: 'center',
+                  }}
+                >
+                  What Our Clients Say About Us
+                </Typography>
+              </SlideUpInView>
             </Box>
 
             {/* Dots Indicator */}

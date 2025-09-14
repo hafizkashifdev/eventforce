@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Container,
   Grid,
   Card,
   CardContent,
@@ -16,8 +15,10 @@ import { Email } from '@mui/icons-material';
 import Image from 'next/image';
 import { AuthBg } from '@/assets/images';
 import { useMediaQuery as useCustomMediaQuery } from '@/hooks/useMediaQuery';
+import { useRouter } from 'next/navigation';
 
 const ForgotPasswordPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const isMobile = useCustomMediaQuery('(max-width:900px)');
 
@@ -29,53 +30,16 @@ const ForgotPasswordPage = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
-      <Box
-        sx={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          backgroundColor: '#000000',
-          py: 2,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
-              Event Force
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: '#1976d2',
-                color: 'white',
-                px: 3,
-                py: 1,
-                borderRadius: '25px',
-                textTransform: 'none',
-                fontWeight: 'bold',
-              }}
-            >
-              Login/Register
-            </Button>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Main Content */}
-      <Box sx={{ flex: 1, display: 'flex', pt: { xs: 8, md: 10 } }}>
-        <Grid container sx={{ minHeight: { xs: 'auto', md: '100vh' } }}>
-          {/* Left Side - Background Image */}
-          <Grid
-            size={{ xs: 0, md: 7 }}
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
+      <Grid container sx={{ minHeight: { xs: 'auto', md: '100vh' } }}>
+        {/* Left Side - Background Image */}
+        <Grid
+          size={{ xs: 0, lg: 7 }}
+          sx={{
+            display: { xs: 'none', md: 'flex' },
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
             <Image
               src={AuthBg}
               alt="Luxury Cars Background"
@@ -93,23 +57,23 @@ const ForgotPasswordPage = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1))',
+                backgroundColor: 'rgba(0,0,0,0.43)',
               }}
             />
           </Grid>
 
-          {/* Right Side - Forgot Password Form */}
-          <Grid
-            size={{ xs: 12, md: 5 }}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              p: { xs: 2, sm: 3, md: 4 },
-              backgroundColor: '#f8f9fa',
-              minHeight: { xs: '100vh', md: 'auto' },
-            }}
-          >
+        {/* Right Side - Forgot Password Form */}
+        <Grid
+          size={{ xs: 12, lg: 5 }}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: { xs: 2, sm: 3, md: 4 },
+            backgroundColor: '#f8f9fa',
+            minHeight: { xs: '100vh', md: 'auto' },
+          }}
+        >
             <Card
               sx={{
                 width: '100%',
@@ -120,22 +84,22 @@ const ForgotPasswordPage = () => {
               }}
             >
               <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-                <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4 } }}>
+                <Box sx={{ textAlign: 'center', mb: { xs: 2, sm: 3 } }}>
                   <Typography
-                    variant={isMobile ? 'h5' : 'h4'}
+                    variant={isMobile ? 'h6' : 'h5'}
                     sx={{
                       fontWeight: 'bold',
                       color: '#333',
-                      mb: 1,
+                      mb: 0.5,
                     }}
                   >
                     Forgot Password?
                   </Typography>
                   <Typography
-                    variant="body1"
+                    variant="body2"
                     sx={{
                       color: '#666',
-                      fontSize: { xs: '0.875rem', sm: '1rem' },
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
                     }}
                   >
                     No worries, we'll send you reset instructions.
@@ -143,16 +107,29 @@ const ForgotPasswordPage = () => {
                 </Box>
 
                 <Box component="form" onSubmit={handleSubmit}>
+                  {/* Email Label */}
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#333',
+                      fontWeight: 'bold',
+                      mb: 0.5,
+                      fontSize: '0.75rem',
+                    }}
+                  >
+                    Email Address*
+                  </Typography>
+                  
                   {/* Email Field */}
                   <TextField
                     fullWidth
-                    label="Email Address"
                     name="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address here"
                     required
+                    size="small"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -161,9 +138,9 @@ const ForgotPasswordPage = () => {
                       ),
                     }}
                     sx={{ 
-                      mb: 3,
+                      mb: 2,
                       '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
+                        borderRadius: '8px',
                       },
                     }}
                   />
@@ -174,35 +151,38 @@ const ForgotPasswordPage = () => {
                     fullWidth
                     variant="contained"
                     sx={{
-                      backgroundColor: '#1976d2',
+                      backgroundColor: '#52A4C1',
                       color: 'white',
-                      py: 1.5,
-                      mb: 3,
-                      borderRadius: '25px',
+                      py: 1,
+                      mb: 2,
+                      borderRadius: '8px',
                       textTransform: 'none',
                       fontWeight: 'bold',
-                      fontSize: '1rem',
+                      fontSize: '0.875rem',
                       '&:hover': {
-                        backgroundColor: '#1565c0',
+                        backgroundColor: '#4a94b1',
                       },
                     }}
                   >
-                    Send OTP
+                    Sent OTP
                   </Button>
 
                   {/* Back to Sign In */}
                   <Box sx={{ textAlign: 'center' }}>
-                    <Typography sx={{ color: '#666', fontSize: '0.875rem' }}>
+                    <Typography sx={{ color: '#666', fontSize: '0.75rem' }}>
                       Remember your password?{' '}
                       <Button
-                        href="/signin"
+                        onClick={() => router.push('/signin')}
                         sx={{
-                          color: '#1976d2',
+                          color: '#52A4C1',
                           textDecoration: 'none',
                           fontWeight: 'bold',
                           textTransform: 'none',
                           p: 0,
                           minWidth: 'auto',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
                           '&:hover': {
                             textDecoration: 'underline',
                             backgroundColor: 'transparent',
@@ -218,7 +198,6 @@ const ForgotPasswordPage = () => {
             </Card>
           </Grid>
         </Grid>
-      </Box>
     </Box>
   );
 };

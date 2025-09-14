@@ -18,6 +18,7 @@ import {
   LocationIcon,
   WhatsAppIcon,
 } from './icons';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -53,7 +54,8 @@ const ContactSection = () => {
 
           {/* Contact Us Card - Left side */}
           <Grid size={{ xs: 12, lg: 5 }} sx={{ zIndex: 2, position: { xs: 'relative', lg: 'absolute' }, top: { xs: 0, lg: 140 }, left: 0, height: { xs: 'auto', lg: '392px' } }}>
-            <Card sx={{
+            <SlideSidewayInView initialX={-50} duration={0.8}>
+              <Card sx={{
               backgroundColor: '#000000',
               color: '#FFFFFF',
               p: { xs: 4, lg: 6 },
@@ -122,11 +124,13 @@ const ContactSection = () => {
                 </IconButton>
               </Box> */}
             </Card>
+            </SlideSidewayInView>
           </Grid>
 
           {/* Contact Form Card - Right side with overlap */}
           <Grid size={{ xs: 12, lg: 10}} sx={{ ml: { xs: 0, lg: 'auto' }, mt: { xs: 2, lg: 6 }, zIndex: 1, position: 'relative' }}>
-            <Card sx={{
+            <SlideUpInView initialY={60} duration={0.9} delay={0.3}>
+              <Card sx={{
               p: { xs: 4, lg: 6 },
               backgroundColor: '#FFFFFF',
               boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
@@ -427,6 +431,7 @@ const ContactSection = () => {
                 </Grid>
               </Grid>
             </Card>
+            </SlideUpInView>
           </Grid>
       </Grid>
     </Box>

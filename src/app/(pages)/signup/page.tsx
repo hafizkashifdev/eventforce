@@ -47,7 +47,7 @@ const SignUpPage = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1))',
+                backgroundColor: 'rgba(0,0,0,0.43)',
               }}
             />
           </Grid>

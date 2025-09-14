@@ -6,9 +6,13 @@ import AuthForm from '@/components/AuthForm';
 import { AuthBg } from '@/assets/images';
 
 const SignInPage = () => {
-  const handleSubmit = (data: { email: string; password: string; fullName?: string }) => {
+  const handleSubmit = (data: { email: string; password: string; fullName?: string; rememberMe?: boolean }) => {
     console.log('Sign In:', data);
     // Handle sign in logic here
+    if (data.rememberMe) {
+      // Store user session for longer duration
+      console.log('Remember me enabled');
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -46,7 +50,7 @@ const SignInPage = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1))',
+                backgroundColor: 'rgba(0,0,0,0.43)',
               }}
             />
           </Grid>

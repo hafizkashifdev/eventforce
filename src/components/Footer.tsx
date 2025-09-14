@@ -19,6 +19,7 @@ import {
   WhatsApp,
 } from '@mui/icons-material';
 import { LogoEventForce } from '@/assets/images';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const Footer = () => {
   const isMobile = useMediaQuery('(max-width:900px)');
@@ -67,25 +68,26 @@ const Footer = () => {
         <Grid container spacing={6}>
           {/* Logo and Description */}
           <Grid size={{ xs: 12, md: 6, lg: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-              <Image
-                src={LogoEventForce}
-                alt="Event Force Logo"
-                width={168}
-                height={51}
-                style={{
-                  objectFit: 'contain',
+            <SlideUpInView initialY={40} duration={0.7}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Image
+                  src={LogoEventForce}
+                  alt="Event Force Logo"
+                  width={168}
+                  height={51}
+                  style={{
+                    objectFit: 'contain',
+                  }}
+                />
+              </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'grey.400',
+                  lineHeight: 1.6,
+                  mb: 3,
                 }}
-              />
-            </Box>
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'grey.400',
-                lineHeight: 1.6,
-                mb: 3,
-              }}
-            >
+              >
               Premium transportation and event logistics solutions across Saudi Arabia. 
               Making every occasion memorable with our luxury fleet and professional service.
             </Typography>
@@ -106,13 +108,15 @@ const Footer = () => {
                 </MuiLink>
               ))}
             </Box>
+            </SlideUpInView>
           </Grid>
 
           {/* Navigation Links */}
           <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-              Navigation
-            </Typography>
+            <SlideSidewayInView initialX={-30} duration={0.8} delay={0.2}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
+                Navigation
+              </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {footerLinks.navigation.map((link) => (
                 <MuiLink
@@ -132,13 +136,15 @@ const Footer = () => {
                 </MuiLink>
               ))}
             </Box>
+            </SlideSidewayInView>
           </Grid>
 
           {/* Services */}
           <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-              Services
-            </Typography>
+            <SlideSidewayInView initialX={-30} duration={0.8} delay={0.4}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
+                Services
+              </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {footerLinks.services.map((link) => (
                 <MuiLink
@@ -157,13 +163,15 @@ const Footer = () => {
                 </MuiLink>
               ))}
             </Box>
+            </SlideSidewayInView>
           </Grid>
 
           {/* Support */}
           <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-              Support
-            </Typography>
+            <SlideSidewayInView initialX={-30} duration={0.8} delay={0.6}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
+                Support
+              </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {footerLinks.support.map((link) => (
                 <MuiLink
@@ -182,23 +190,25 @@ const Footer = () => {
                 </MuiLink>
               ))}
             </Box>
+            </SlideSidewayInView>
           </Grid>
         </Grid>
 
         {/* Bottom Section */}
-        <Box
-          sx={{
-            borderTop: '1px solid',
-            borderColor: 'grey.800',
-            mt: 6,
-            pt: 4,
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 2,
-          }}
-        >
+        <SlideUpInView initialY={30} duration={0.7} delay={0.8}>
+          <Box
+            sx={{
+              borderTop: '1px solid',
+              borderColor: 'grey.800',
+              mt: 6,
+              pt: 4,
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
           <Box
             sx={{
               display: 'flex',
@@ -237,6 +247,7 @@ const Footer = () => {
             © {currentYear} Event Force. All rights reserved.
           </Typography>
         </Box>
+        </SlideUpInView>
       </Box>
     </Box>
   );

@@ -12,6 +12,7 @@ import {
   Fade,
 } from '@mui/material';
 import { Download as DownloadIcon } from '@mui/icons-material';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const DownloadProfile = () => {
   const [visible, setVisible] = useState(false);
@@ -81,48 +82,52 @@ Downloaded on: ${new Date().toLocaleDateString()}`;
               width: '100%',
             }}
           >
-            <Typography
-              variant="body1"
-              component="h3"
-              sx={{
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 500,
-                fontSize: { xs: '16px', sm: '18px' },
-                color: '#333333',
-                lineHeight: 'Auto',
-                letterSpacing: '0px',
-                textAlign: { xs: 'center', sm: 'left' },
-              }}
-            >
-              Visit Event Force Profile
-            </Typography>
-            <Button
-              onClick={handleDownload}
-              variant="contained"
-              endIcon={<DownloadIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
-              sx={{
-                backgroundColor: '#52A4C1',
-                borderRadius: '8px',
-                width: { xs: '100%', sm: 212 },
-                height: 48,
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 500,
-                fontSize: { xs: '12px', sm: '14px' },
-                color: '#FFFFFF',
-                textTransform: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 1,
-                '&:hover': {
-                  backgroundColor: '#4A8FA8',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.3s',
-              }}
-            >
-              Download
-            </Button>
+            <SlideSidewayInView initialX={-30} duration={0.8}>
+              <Typography
+                variant="body1"
+                component="h3"
+                sx={{
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 500,
+                  fontSize: { xs: '16px', sm: '18px' },
+                  color: '#333333',
+                  lineHeight: 'Auto',
+                  letterSpacing: '0px',
+                  textAlign: { xs: 'center', sm: 'left' },
+                }}
+              >
+                Visit Event Force Profile
+              </Typography>
+            </SlideSidewayInView>
+            <SlideSidewayInView initialX={30} duration={0.8} delay={0.2}>
+              <Button
+                onClick={handleDownload}
+                variant="contained"
+                endIcon={<DownloadIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
+                sx={{
+                  backgroundColor: '#52A4C1',
+                  borderRadius: '8px',
+                  width: { xs: '100%', sm: 212 },
+                  height: 48,
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 500,
+                  fontSize: { xs: '12px', sm: '14px' },
+                  color: '#FFFFFF',
+                  textTransform: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 1,
+                  '&:hover': {
+                    backgroundColor: '#4A8FA8',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'all 0.3s',
+                }}
+              >
+                Download
+              </Button>
+            </SlideSidewayInView>
           </Box>
         </Fade>
       </Box>

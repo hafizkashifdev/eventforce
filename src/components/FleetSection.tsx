@@ -25,6 +25,7 @@ import {
   CarToyotaCoaster,
 } from '@/assets/images';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
 const FleetSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -103,32 +104,34 @@ const FleetSection = () => {
         <Fade in={visible} timeout={700}>
           <Box>
             <Box sx={{ textAlign: 'center', mb: 8 }}>
-              <Typography
-                variant={isMobile ? 'h4' : 'h3'}
-                component="h2"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 'bold',
-                  fontSize: '36px',
-                  color: '#525252',
-                  mb: 2,
-                  position: 'relative',
-                  display: 'inline-block',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-8px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60px',
-                    height: '4px',
-                    backgroundColor: '#52A4C1',
-                    borderRadius: '2px',
-                  },
-                }}
-              >
-                Most Rented Cars
-              </Typography>
+              <SlideUpInView initialY={60} duration={0.8}>
+                <Typography
+                  variant={isMobile ? 'h4' : 'h3'}
+                  component="h2"
+                  sx={{
+                    fontFamily: 'Poppins, sans-serif',
+                    fontWeight: 'bold',
+                    fontSize: '36px',
+                    color: '#525252',
+                    mb: 2,
+                    position: 'relative',
+                    display: 'inline-block',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      bottom: '-8px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '60px',
+                      height: '4px',
+                      backgroundColor: '#52A4C1',
+                      borderRadius: '2px',
+                    },
+                  }}
+                >
+                  Most Rented Cars
+                </Typography>
+              </SlideUpInView>
             </Box>
 
             <Box sx={{ position: 'relative' }}>

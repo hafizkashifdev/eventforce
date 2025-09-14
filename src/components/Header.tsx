@@ -120,7 +120,7 @@ const Header = () => {
         <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <Button
             component={Link}
-            href="/signin"
+            href="/signup"
             variant="contained"
             fullWidth
             onClick={handleDrawerToggle}
@@ -142,7 +142,7 @@ const Header = () => {
               transition: 'all 0.3s ease',
             }}
           >
-            Login/Register
+            Sign Up
           </Button>
         </Box>
       </Box>
@@ -218,7 +218,7 @@ const Header = () => {
               ))}
             </Box>
 
-            {/* Login/Register Button */}
+            {/* Sign Up Button */}
             <Box sx={{ display: { xs: 'none', lg: 'flex' } }}>
               <Button
                 component={Link}
@@ -227,7 +227,7 @@ const Header = () => {
                 sx={{
                   backgroundColor: '#52A4C1',
                   borderRadius: '8px',
-                  width: '156px',
+                  width: '120px',
                   height: '48px',
                   px: '24px',
                   py: '10px',
@@ -241,7 +241,7 @@ const Header = () => {
                   transition: 'all 0.2s',
                 }}
               >
-                Login/Register
+                Sign Up
               </Button>
             </Box>
 
@@ -265,6 +265,7 @@ const Header = () => {
         anchor="top"
         open={mobileOpen}
         onClose={handleDrawerToggle}
+        disableScrollLock
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}

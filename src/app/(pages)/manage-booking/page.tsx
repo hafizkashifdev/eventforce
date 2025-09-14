@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { 
   Box, 
   Typography, 
@@ -21,9 +22,21 @@ import { CloudUpload, CalendarToday } from '@mui/icons-material'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { CarFordTaurus } from '@/assets/images'
+import { 
+  CarFordTaurus,
+  CarBmw7Series,
+  CarMercedesS450,
+  CarGmc,
+  CarHiace,
+  CarMercedesVClass,
+  CarToyotaCoaster,
+  CarChinesbus49Sea
+} from '@/assets/images'
+import AboutBg from '@/assets/images/about-bg.png'
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations'
 
 const ManageBookingPage = () => {
+  const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -37,17 +50,45 @@ const ManageBookingPage = () => {
 
   const [selectedCarDetails, setSelectedCarDetails] = useState({
     name: 'Ford Taurus',
-    price: '100 SAR',
-    duration: 'Per day',
+    price: '125 SAR',
+    duration: 'Per hour',
     image: CarFordTaurus
   })
 
   const availableCars = [
-    { value: 'ford-taurus', name: 'Ford Taurus', price: '100 SAR', duration: 'Per day', image: CarFordTaurus },
-    { value: 'bmw-5-series', name: 'BMW 5 Series', price: '150 SAR', duration: 'Per day', image: CarFordTaurus },
-    { value: 'mercedes-s450', name: 'Mercedes S450', price: '400 SAR', duration: 'Per day', image: CarFordTaurus },
-    { value: 'gmc-yukon', name: 'GMC Yukon', price: '150 SAR', duration: 'Per hour', image: CarFordTaurus }
+    { value: 'ford-taurus', name: 'Ford Taurus', price: '125 SAR', duration: 'Per hour', image: CarFordTaurus },
+    { value: 'gmc-yukon', name: 'GMC', price: '150 SAR', duration: 'Per hour', image: CarGmc },
+    { value: 'bmw-5-series', name: 'BMW 5 Series', price: '150 SAR', duration: 'Per day', image: CarBmw7Series },
+    { value: 'mercedes-s450', name: 'Mercedes S450', price: '400 SAR', duration: 'Per day', image: CarMercedesS450 },
+    { value: 'bmw-7-series', name: 'BMW 7 Series', price: '400 SAR', duration: 'Per day', image: CarBmw7Series },
+    { value: 'mercedes-v-class', name: 'Mercedes V Class', price: '100 SAR', duration: 'Per day', image: CarMercedesVClass },
+    { value: 'hiace', name: 'Hiace', price: '1000 SAR', duration: '12 hours', image: CarHiace },
+    { value: 'toyota-coaster', name: 'Toyota Coaster', price: '1500 SAR', duration: '12 hours', image: CarToyotaCoaster },
+    { value: 'chines-bus-49-sea', name: 'Chines Bus 49 Sea', price: '2000 SAR', duration: '12 hours', image: CarChinesbus49Sea }
   ]
+
+  // Handle URL parameters for car selection
+  useEffect(() => {
+    const carName = searchParams.get('car')
+    const carPrice = searchParams.get('price')
+    const carDuration = searchParams.get('duration')
+    
+    if (carName) {
+      const car = availableCars.find(c => c.name.toLowerCase().replace(/\s+/g, '-') === carName.toLowerCase())
+      if (car) {
+        setSelectedCarDetails({
+          name: car.name,
+          price: carPrice || car.price,
+          duration: carDuration || car.duration,
+          image: car.image
+        })
+        setFormData(prev => ({
+          ...prev,
+          selectedCar: car.value
+        }))
+      }
+    }
+  }, [searchParams])
 
   const handleInputChange = (field: string) => (event: any) => {
     setFormData({
@@ -92,40 +133,123 @@ const ManageBookingPage = () => {
   return (
     <>
       <Header />
-      <Box sx={{ pt: 12, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-        <Container maxWidth="lg" sx={{ py: 6 }}>
-          <Typography 
-            variant="h3" 
-            component="h1" 
-            sx={{ 
-              fontWeight: 'bold', 
-              mb: 6, 
-              textAlign: 'center',
-              color: '#333'
+      <Box 
+        sx={{ 
+          pt: 8,
+          minHeight: '70vh',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+          // Fallback background
+          backgroundImage: `url(${AboutBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Background Image */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0
+          }}
+        >
+          <Image
+            src={AboutBg}
+            alt="Manage Booking Background"
+            fill
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center'
             }}
-          >
-            Manage Booking
-          </Typography>
+            priority
+          />
+        </Box>
+        
+        {/* Overlay for better text readability */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)',
+            zIndex: 1
+          }}
+        />
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <SlideUpInView initialY={60} duration={0.8}>
+              <Typography 
+                variant="h2" 
+                component="h1" 
+                sx={{ 
+                  fontWeight: 'bold', 
+                  mb: 4,
+                  color: 'white',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                }}
+              >
+                Manage Booking
+              </Typography>
+            </SlideUpInView>
+            <SlideUpInView initialY={40} duration={0.9} delay={0.2}>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  color: 'rgba(255,255,255,0.9)', 
+                  lineHeight: 1.6,
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }
+                }}
+              >
+                Book and manage your transportation services with ease
+              </Typography>
+            </SlideUpInView>
+          </Box>
+        </Container>
+      </Box>
+      
+      <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+        <Container maxWidth="lg" sx={{ py: 6 }}>
           
           <Grid container spacing={4}>
             {/* Booking Form - Left Side */}
             <Grid size={{ xs: 12, md: 7 }}>
-              <Card sx={{ p: 4, backgroundColor: '#f8f9fa' }} id="booking-form">
-                <CardContent sx={{ p: 0 }}>
-                  <form onSubmit={handleSubmit}>
+              <SlideSidewayInView initialX={-50} duration={0.8}>
+                <Card sx={{ p: 4, backgroundColor: 'white' }} id="booking-form">
+                  <CardContent sx={{ p: 0 }}>
+                    <form onSubmit={handleSubmit}>
                     <Grid container spacing={3}>
                       {/* Full Name */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Full Name*
+                        </Typography>
                         <TextField
                           fullWidth
-                          label="Full Name *"
                           value={formData.fullName}
                           onChange={handleInputChange('fullName')}
-                          placeholder="Enter your full name"
+                          placeholder="Enter your email address here"
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#e9ecef',
-                              borderRadius: 2,
+                              borderRadius: '8px',
                             }
                           }}
                         />
@@ -133,17 +257,26 @@ const ManageBookingPage = () => {
 
                       {/* Email */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Email Address*
+                        </Typography>
                         <TextField
                           fullWidth
-                          label="Email Address *"
                           type="email"
                           value={formData.email}
                           onChange={handleInputChange('email')}
                           placeholder="Enter your email address here"
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#e9ecef',
-                              borderRadius: 2,
+                              borderRadius: '8px',
                             }
                           }}
                         />
@@ -151,6 +284,17 @@ const ManageBookingPage = () => {
 
                       {/* Contact Number */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Contact Number*
+                        </Typography>
                         <Box sx={{ display: 'flex', gap: 2 }}>
                           <TextField
                             label="Country Code"
@@ -159,21 +303,18 @@ const ManageBookingPage = () => {
                             sx={{ 
                               width: '30%',
                               '& .MuiOutlinedInput-root': {
-                                backgroundColor: '#e9ecef',
-                                borderRadius: 2,
+                                borderRadius: '8px',
                               }
                             }}
                           />
                           <TextField
                             fullWidth
-                            label="Contact Number *"
                             value={formData.contactNumber}
                             onChange={handleInputChange('contactNumber')}
-                            placeholder="Enter your contact number"
+                            placeholder="Enter your email address here"
                             sx={{
                               '& .MuiOutlinedInput-root': {
-                                backgroundColor: '#e9ecef',
-                                borderRadius: 2,
+                                borderRadius: '8px',
                               }
                             }}
                           />
@@ -182,18 +323,32 @@ const ManageBookingPage = () => {
 
                       {/* Select Car */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Select Car*
+                        </Typography>
                         <FormControl fullWidth>
-                          <InputLabel>Select Car *</InputLabel>
                           <Select
                             value={formData.selectedCar}
                             onChange={(e) => handleCarSelect(e.target.value)}
-                            label="Select Car *"
+                            displayEmpty
+                            MenuProps={{
+                              disableScrollLock: true,
+                            }}
                             sx={{
-                              backgroundColor: formData.selectedCar ? '#e3f2fd' : '#e9ecef',
-                              borderRadius: 2,
-                              border: formData.selectedCar ? '2px solid #1976d2' : '1px solid #ccc',
+                              borderRadius: '8px',
                             }}
                           >
+                            <MenuItem value="" disabled>
+                              Enter your email address here
+                            </MenuItem>
                             {availableCars.map((car) => (
                               <MenuItem key={car.value} value={car.value}>
                                 {car.name} - {car.price}/{car.duration}
@@ -201,25 +356,29 @@ const ManageBookingPage = () => {
                             ))}
                           </Select>
                         </FormControl>
-                        {formData.selectedCar && (
-                          <Typography variant="body2" sx={{ color: '#1976d2', mt: 1, fontWeight: 'bold' }}>
-                            ✓ {selectedCarDetails.name} selected
-                          </Typography>
-                        )}
                       </Grid>
 
                       {/* Trip Type */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Trip Type*
+                        </Typography>
                         <TextField
                           fullWidth
-                          label="Trip Type *"
                           value={formData.tripType}
                           onChange={handleInputChange('tripType')}
-                          placeholder="Enter trip type"
+                          placeholder="Enter your email address here"
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#e9ecef',
-                              borderRadius: 2,
+                              borderRadius: '8px',
                             }
                           }}
                         />
@@ -227,22 +386,38 @@ const ManageBookingPage = () => {
 
                       {/* Upload Photo */}
                       <Grid size={{ xs: 12 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Upload Photo*
+                        </Typography>
                         <Box
                           sx={{
                             border: '2px dashed #ccc',
-                            borderRadius: 2,
+                            borderRadius: '8px',
                             p: 4,
                             textAlign: 'center',
-                            backgroundColor: '#e9ecef',
+                            backgroundColor: '#f8f9fa',
                             cursor: 'pointer',
+                            minHeight: '120px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                             '&:hover': {
-                              borderColor: '#1976d2',
-                              backgroundColor: '#f0f0f0',
+                              borderColor: '#52A4C1',
+                              backgroundColor: '#f0f8ff',
                             }
                           }}
                         >
-                          <CloudUpload sx={{ fontSize: 40, color: '#666', mb: 2 }} />
-                          <Typography variant="h6" sx={{ color: '#666' }}>
+                          <CloudUpload sx={{ fontSize: 40, color: '#666', mb: 1 }} />
+                          <Typography variant="body1" sx={{ color: '#666', fontWeight: 'bold' }}>
                             Upload Photo
                           </Typography>
                         </Box>
@@ -250,9 +425,19 @@ const ManageBookingPage = () => {
 
                       {/* Pickup Date */}
                       <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Pickup Date*
+                        </Typography>
                         <TextField
                           fullWidth
-                          label="Pickup Date *"
                           type="date"
                           value={formData.pickupDate}
                           onChange={handleInputChange('pickupDate')}
@@ -265,8 +450,7 @@ const ManageBookingPage = () => {
                           }}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#e9ecef',
-                              borderRadius: 2,
+                              borderRadius: '8px',
                             }
                           }}
                         />
@@ -274,9 +458,19 @@ const ManageBookingPage = () => {
 
                       {/* Return Date */}
                       <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: '#333',
+                            fontWeight: 'bold',
+                            mb: 0.5,
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          Return Date*
+                        </Typography>
                         <TextField
                           fullWidth
-                          label="Return Date *"
                           type="date"
                           value={formData.returnDate}
                           onChange={handleInputChange('returnDate')}
@@ -289,8 +483,7 @@ const ManageBookingPage = () => {
                           }}
                           sx={{
                             '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#e9ecef',
-                              borderRadius: 2,
+                              borderRadius: '8px',
                             }
                           }}
                         />
@@ -305,11 +498,13 @@ const ManageBookingPage = () => {
                             sx={{
                               flex: 1,
                               py: 1.5,
-                              borderColor: '#666',
+                              borderColor: '#D8D8D8',
                               color: '#666',
+                              backgroundColor: '#D8D8D8',
+                              borderRadius: '8px',
                               '&:hover': {
-                                borderColor: '#333',
-                                color: '#333',
+                                borderColor: '#ccc',
+                                backgroundColor: '#ccc',
                               }
                             }}
                           >
@@ -322,9 +517,10 @@ const ManageBookingPage = () => {
                             sx={{
                               flex: 1,
                               py: 1.5,
-                              backgroundColor: '#1976d2',
+                              backgroundColor: '#52A4C1',
+                              borderRadius: '8px',
                               '&:hover': {
-                                backgroundColor: '#1565c0',
+                                backgroundColor: '#4a94b1',
                               }
                             }}
                           >
@@ -334,33 +530,36 @@ const ManageBookingPage = () => {
                       </Grid>
                     </Grid>
                   </form>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </SlideSidewayInView>
             </Grid>
 
             {/* Car Details Card - Right Side */}
             <Grid size={{ xs: 12, md: 5 }}>
-              <Card sx={{ 
-                p: 0, 
-                backgroundColor: 'white',
-                borderRadius: 3,
-                overflow: 'hidden',
-                boxShadow: 3
-              }}>
+              <SlideUpInView initialY={60} duration={0.9} delay={0.3}>
+                <Card sx={{ 
+                  p: 0, 
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}>
                 <CardContent sx={{ p: 0 }}>
                   <Box sx={{ p: 3 }}>
                     <Typography 
                       variant="h4" 
                       sx={{ 
-                        color: '#1976d2', 
+                        color: '#52A4C1', 
                         fontWeight: 'bold', 
-                        mb: 3 
+                        mb: 3,
+                        fontSize: '1.5rem'
                       }}
                     >
                       {selectedCarDetails.name}
                     </Typography>
                     
-                    <Box sx={{ mb: 3 }}>
+                    <Box sx={{ mb: 3, textAlign: 'center' }}>
                       <Image
                         src={selectedCarDetails.image.src || selectedCarDetails.image}
                         alt={selectedCarDetails.name}
@@ -380,7 +579,8 @@ const ManageBookingPage = () => {
                       sx={{ 
                         color: '#333', 
                         fontWeight: 'bold', 
-                        mb: 3 
+                        mb: 3,
+                        fontSize: '1.1rem'
                       }}
                     >
                       Rent: {selectedCarDetails.price}/{selectedCarDetails.duration}
@@ -393,9 +593,10 @@ const ManageBookingPage = () => {
                       onClick={handleBookNow}
                       sx={{
                         py: 1.5,
-                        backgroundColor: '#1976d2',
+                        backgroundColor: '#52A4C1',
+                        borderRadius: '8px',
                         '&:hover': {
-                          backgroundColor: '#1565c0',
+                          backgroundColor: '#4a94b1',
                         }
                       }}
                     >
@@ -404,6 +605,7 @@ const ManageBookingPage = () => {
                   </Box>
                 </CardContent>
               </Card>
+              </SlideUpInView>
             </Grid>
           </Grid>
         </Container>

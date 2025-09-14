@@ -12,6 +12,21 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Event Force - Premium Transportation & Event Logistics",
   description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
+  keywords: ["transportation", "luxury cars", "event logistics", "Saudi Arabia", "VIP transport", "car rental", "event planning"],
+  authors: [{ name: "Event Force" }],
+  creator: "Event Force",
+  publisher: "Event Force",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { rel: "icon", url: "/favicon.ico", type: "image/x-icon" },
@@ -40,6 +55,8 @@ export const metadata: Metadata = {
     description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
     url: `https://eventforce.sa`,
     type: "website",
+    locale: "en_US",
+    siteName: "Event Force",
     images: [
       {
         url: `https://eventforce.sa/og.png`,
@@ -49,6 +66,17 @@ export const metadata: Metadata = {
         alt: "Event Force - Premium Transportation",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Event Force - Premium Transportation & Event Logistics",
+    description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
+    images: ["https://eventforce.sa/og.png"],
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
   },
 };
 

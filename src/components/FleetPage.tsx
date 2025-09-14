@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -27,13 +27,24 @@ import {
   CarMercedesVClass,
   CarToyotaCoaster,
 } from '@/assets/images';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
 
-const FleetPage = () => {
+interface Car {
+  name: string;
+  price: string;
+  duration: string;
+  image: any;
+  class: string;
+  year: string;
+  branch: string;
+}
+
+const FleetPage = memo(() => {
   const [selectedBranch, setSelectedBranch] = useState('all');
   const [selectedClass, setSelectedClass] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
 
-  const fleet = [
+  const fleet: Car[] = [
     {
       name: 'Ford Taurus',
       price: '125 SAR',
@@ -117,16 +128,34 @@ const FleetPage = () => {
     },
   ];
 
-  const filteredFleet = fleet.filter(car => {
-    const branchMatch = selectedBranch === 'all' || car.branch === selectedBranch;
-    const classMatch = selectedClass === 'all' || car.class === selectedClass;
-    const yearMatch = selectedYear === 'all' || car.year === selectedYear;
-    return branchMatch && classMatch && yearMatch;
-  });
+  const filteredFleet = useMemo(() => {
+    return fleet.filter(car => {
+      const branchMatch = selectedBranch === 'all' || car.branch === selectedBranch;
+      const classMatch = selectedClass === 'all' || car.class === selectedClass;
+      const yearMatch = selectedYear === 'all' || car.year === selectedYear;
+      return branchMatch && classMatch && yearMatch;
+    });
+  }, [fleet, selectedBranch, selectedClass, selectedYear]);
+
+  const handleBookCar = useCallback((index: number) => {
+    const car = filteredFleet[index]
+    if (car) {
+      // Create URL parameters for the selected car
+      const params = new URLSearchParams({
+        car: car.name.toLowerCase().replace(/\s+/g, '-'),
+        price: car.price,
+        duration: car.duration
+      })
+      
+      // Redirect to manage booking page with car data
+      window.location.href = `/manage-booking?${params.toString()}`
+    }
+  }, [filteredFleet]);
 
   return (
-    <Box sx={{ py: 10, backgroundColor: 'grey.50' }}>
+    <Box sx={{ py: 8, backgroundColor: 'white' }}>
       <Container maxWidth="lg">
+       
 
         {/* Filters */}
         <Box sx={{ mb: 6 }}>
@@ -138,8 +167,16 @@ const FleetPage = () => {
                   value={selectedBranch}
                   label="Branch"
                   onChange={(e) => setSelectedBranch(e.target.value)}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                    },
+                  }}
                 >
-                  <MenuItem value="all">All Branches</MenuItem>
+                  <MenuItem value="all">Select Branch</MenuItem>
                   <MenuItem value="Riyadh">Riyadh</MenuItem>
                   <MenuItem value="Jeddah">Jeddah</MenuItem>
                 </Select>
@@ -152,8 +189,16 @@ const FleetPage = () => {
                   value={selectedClass}
                   label="Fleet Class"
                   onChange={(e) => setSelectedClass(e.target.value)}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                    },
+                  }}
                 >
-                  <MenuItem value="all">All Classes</MenuItem>
+                  <MenuItem value="all">All</MenuItem>
                   <MenuItem value="Economy">Economy</MenuItem>
                   <MenuItem value="SUV">SUV</MenuItem>
                   <MenuItem value="Luxury">Luxury</MenuItem>
@@ -169,8 +214,16 @@ const FleetPage = () => {
                   value={selectedYear}
                   label="Model Year"
                   onChange={(e) => setSelectedYear(e.target.value)}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                    },
+                  }}
                 >
-                  <MenuItem value="all">All Years</MenuItem>
+                  <MenuItem value="all">Select Year</MenuItem>
                   <MenuItem value="2024">2024</MenuItem>
                   <MenuItem value="2023">2023</MenuItem>
                 </Select>
@@ -183,95 +236,94 @@ const FleetPage = () => {
         <Grid container spacing={3}>
           {filteredFleet.map((car, index) => (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-              <Card
+              <ScaleInView initialScale={0.8} duration={0.6} delay={index * 0.1}>
+                <Card
                 sx={{
                   height: '100%',
+                  borderRadius: '8px',
+                  backgroundColor: '#F8F8F8',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 8,
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
                   },
                 }}
               >
-                <CardMedia
-                  sx={{
-                    height: 200,
-                    position: 'relative',
-                    backgroundColor: 'grey.100',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Image
-                    src={car.image.src || car.image}
-                    alt={car.name}
-                    width={200}
-                    height={120}
-                    style={{ objectFit: 'contain' }}
-                  />
-                  <Chip
-                    label={car.class}
-                    color="primary"
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      backgroundColor: 'rgba(255,255,255,0.9)',
-                    }}
-                  />
-                </CardMedia>
-
                 <CardContent sx={{ p: 3 }}>
+                  {/* Vehicle Title - Top Left */}
                   <Typography
                     variant="h6"
                     component="h3"
                     sx={{
                       fontWeight: 'bold',
-                      color: 'text.primary',
+                      color: '#52A4C1',
                       mb: 2,
+                      fontSize: '1.1rem',
+                      textAlign: 'left',
                     }}
                   >
                     {car.name}
                   </Typography>
 
-                  <Box sx={{ mb: 3 }}>
+                  {/* Car Image - Centered */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mb: 2,
+                      backgroundColor: 'white',
+                      borderRadius: '4px',
+                      p: 1,
+                    }}
+                  >
+                    <Image
+                      src={car.image.src || car.image}
+                      alt={car.name}
+                      width={200}
+                      height={120}
+                      style={{ objectFit: 'contain' }}
+                    />
+                  </Box>
+
+                  {/* Rent Info - Left Aligned */}
+                  <Box sx={{ mb: 2, textAlign: 'left' }}>
                     <Typography
-                      variant="h5"
+                      variant="body1"
                       sx={{
-                        color: 'primary.main',
-                        fontWeight: 'bold',
-                        display: 'inline',
+                        color: '#333',
+                        fontSize: '0.9rem',
+                        fontWeight: '500',
                       }}
                     >
-                      Rent: {car.price}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: 'text.secondary',
-                        ml: 1,
-                        display: 'inline',
-                      }}
-                    >
-                      / {car.duration}
+                      Rent: {car.price} / {car.duration}
                     </Typography>
                   </Box>
 
+                  {/* Book Now Button - Centered */}
                   <Button
                     variant="contained"
                     fullWidth
+                    onClick={() => handleBookCar(index)}
                     sx={{
-                      py: 1.5,
+                      backgroundColor: '#52A4C1',
+                      color: 'white',
+                      py: 1.2,
                       fontWeight: 'bold',
                       textTransform: 'none',
+                      borderRadius: '8px',
+                      fontSize: '0.9rem',
+                      '&:hover': {
+                        backgroundColor: '#4a94b1',
+                      },
                     }}
                   >
                     Book Now
                   </Button>
                 </CardContent>
               </Card>
+              </ScaleInView>
             </Grid>
           ))}
         </Grid>
@@ -286,6 +338,8 @@ const FleetPage = () => {
       </Container>
     </Box>
   );
-};
+});
+
+FleetPage.displayName = 'FleetPage';
 
 export default FleetPage;
