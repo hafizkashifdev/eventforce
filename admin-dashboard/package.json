@@ -1,0 +1,36 @@
+{
+  "name": "event-force-admin-dashboard",
+  "version": "1.0.0",
+  "description": "Event Force Admin Dashboard",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "14.0.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@mui/material": "^5.15.0",
+    "@mui/icons-material": "^5.15.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^5.8.4",
+    "axios": "^1.6.2",
+    "recharts": "^2.8.0",
+    "date-fns": "^2.30.0",
+    "js-cookie": "^3.0.5",
+    "@types/js-cookie": "^3.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "20.10.4",
+    "@types/react": "18.2.42",
+    "@types/react-dom": "18.2.17",
+    "eslint": "8.55.0",
+    "eslint-config-next": "14.0.4",
+    "typescript": "5.3.3"
+  }
+}

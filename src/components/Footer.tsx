@@ -8,8 +8,8 @@ import {
   Typography,
   Grid,
   Link as MuiLink,
-  useMediaQuery,
 } from '@mui/material';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import {
   Facebook,
   Twitter,
@@ -39,10 +39,10 @@ const Footer = () => {
       { name: 'Wedding Services', href: '#' },
     ],
     support: [
-      { name: 'Help Center', href: '#' },
-      { name: 'Terms of Service', href: '#' },
-      { name: 'Privacy Policy', href: '#' },
-      { name: 'FAQ', href: '#' },
+      { name: 'Help Center', href: '/support/help-center' },
+      { name: 'FAQ', href: '/support/faq' },
+      { name: 'Terms of Service', href: '/support/terms' },
+      { name: 'Privacy Policy', href: '/support/privacy' },
     ]
   };
 
@@ -176,6 +176,7 @@ const Footer = () => {
               {footerLinks.support.map((link) => (
                 <MuiLink
                   key={link.name}
+                  component={Link}
                   href={link.href}
                   sx={{
                     color: 'grey.400',

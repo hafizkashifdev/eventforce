@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Header from '@/components/Header'
 import HeroSection from '@/components/HeroSection'
 import MissionVision from '@/components/MissionVision'
-import BenefitsSection from '@/components/BenefitsSection'
 import DownloadProfile from '@/components/DownloadProfile'
-import TestimonialsSection from '@/components/TestimonialsSection'
-import FleetSection from '@/components/FleetSection'
-import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
+import { 
+  SuspenseBenefitsSection, 
+  SuspenseTestimonialsSection, 
+  SuspenseFleetSection, 
+  SuspenseContactSection 
+} from '@/components/LazyComponents'
 
 const HomePage = () => {
   return (
@@ -15,11 +17,11 @@ const HomePage = () => {
       <Header />
       <HeroSection />
       <MissionVision />
-      <BenefitsSection />
+      <SuspenseBenefitsSection />
       <DownloadProfile />
-      <TestimonialsSection />
-      <FleetSection />
-      <ContactSection />
+      <SuspenseTestimonialsSection />
+      <SuspenseFleetSection />
+      <SuspenseContactSection />
       <Footer />
     </>
   )

@@ -1,57 +1,71 @@
-"use client";
+'use client';
 
-import { ANIMATIONS_BASE_DURATION } from "@/constants/animations";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { useEffect, useRef, memo } from "react";
+import React, { useRef, useEffect, useState } from 'react';
+import { Box, BoxProps } from '@mui/material';
 
-interface SlideUpInViewProps {
+interface SlideUpInViewProps extends BoxProps {
   children: React.ReactNode;
-  initialOpacity?: number;
   initialY?: number;
   duration?: number;
-  height?: string;
   delay?: number;
+  threshold?: number;
 }
 
-const SlideUpInView = memo((props: SlideUpInViewProps) => {
-  const {
-    children,
-    initialOpacity = 0,
-    initialY = 50,
-    duration = ANIMATIONS_BASE_DURATION?.UP_DOWN,
-    height = "auto",
-  } = props;
-
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const controls = useAnimation();
+const SlideUpInView: React.FC<SlideUpInViewProps> = ({
+  children,
+  initialY = 30,
+  duration = 0.6,
+  delay = 0,
+  threshold = 0.1,
+  ...props
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (inView) {
-      controls.start("visible");
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            setIsVisible(true);
+          }, delay * 1000);
+        }
+      },
+      { threshold }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
     }
-  }, [inView, controls]);
+
+    return () => {
+      if (elementRef.current) {
+        observer.unobserve(elementRef.current);
+      }
+    };
+  }, [delay, threshold, isMounted]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      style={{ position: "relative", height }}
-      variants={{
-        hidden: { opacity: initialOpacity, y: initialY },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: duration, ease: "easeOut" },
-        },
+    <Box
+      ref={elementRef}
+      sx={{
+        transform: isMounted && isVisible ? 'translateY(0)' : `translateY(${initialY}px)`,
+        opacity: isMounted && isVisible ? 1 : 0,
+        transition: isMounted ? `all ${duration}s ease-out` : 'none',
+        ...props.sx,
       }}
+      {...props}
     >
       {children}
-    </motion.div>
+    </Box>
   );
-});
-
-SlideUpInView.displayName = 'SlideUpInView';
+};
 
 export default SlideUpInView;

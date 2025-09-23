@@ -14,20 +14,23 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff, Google, Apple } from '@mui/icons-material';
-import { useMediaQuery as useCustomMediaQuery } from '@/hooks/useMediaQuery';
-import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { ScaleInView, SlideSidewayInView, SlideUpInView } from './animations';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AuthFormProps {
   mode: 'signup' | 'signin';
-  onSubmit?: (formData: { email: string; password: string; fullName?: string; rememberMe?: boolean }) => void;
   onSocialLogin?: (provider: string) => void;
 }
 
-const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin }) => {
+const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSocialLogin }) => {
   const router = useRouter();
+  const { login, register, error, isLoading, clearError } = useAuth();
   const [formData, setFormData] = useState({ 
     fullName: '', 
     email: '', 
@@ -35,7 +38,9 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
     rememberMe: false 
   });
   const [showPassword, setShowPassword] = useState(false);
-  const isMobile = useCustomMediaQuery('(max-width:900px)');
+  const [localError, setLocalError] = useState('');
+  const [localLoading, setLocalLoading] = useState(false);
+  const isMobile = useMediaQuery('(max-width:900px)');
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -45,10 +50,33 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
     }));
   }, []);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.(formData);
-  }, [formData, onSubmit]);
+    clearError();
+    setLocalError('');
+    
+    try {
+      if (mode === 'signin') {
+        const credentials = {
+          email: formData.email,
+          password: formData.password,
+          rememberMe: formData.rememberMe,
+        };
+        await login(credentials);
+        router.push('/dashboard');
+      } else {
+        const credentials = {
+          email: formData.email,
+          password: formData.password,
+          name: formData.fullName,
+        };
+        await register(credentials);
+        router.push('/dashboard');
+      }
+    } catch (error: any) {
+      setLocalError(error.message || 'Authentication failed');
+    }
+  }, [formData, mode, login, register, clearError, router]);
 
   const handleSocialLogin = useCallback((provider: string) => {
     onSocialLogin?.(provider);
@@ -72,13 +100,13 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
               variant={isMobile ? 'h6' : 'h5'}
               sx={{ fontWeight: 'bold', color: '#333', mb: 0.5 }}
             >
-              {mode === 'signup' ? 'Create Account' : 'Sign In'}
+              {mode === 'signup' ? 'Create Account' : 'Admin Sign In'}
             </Typography>
             <Typography
               variant="body2"
               sx={{ color: '#666', fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
             >
-              {mode === 'signin' ? 'Welcome Back! Login to access your account' : ''}
+              {mode === 'signin' ? 'Welcome Back! Login to access admin dashboard' : 'Sign up for Event Force'}
             </Typography>
           </Box>
         </SlideUpInView>
@@ -145,6 +173,22 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
             </Box>
             </>
           </SlideSidewayInView>
+        )}
+
+        {/* Error Alert */}
+        {(error || localError) && (
+          <SlideUpInView initialY={20} duration={0.6} delay={0.3}>
+            <Alert 
+              severity="error" 
+              sx={{ mb: 2, fontSize: '0.875rem' }}
+              onClose={() => {
+                clearError();
+                setLocalError('');
+              }}
+            >
+              {error || localError}
+            </Alert>
+          </SlideUpInView>
         )}
 
         {/* Form */}
@@ -315,6 +359,7 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
             type="submit"
             fullWidth
             variant="contained"
+            disabled={isLoading || localLoading}
             sx={{
               backgroundColor: '#52A4C1',
               color: 'white',
@@ -327,9 +372,17 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
               '&:hover': { 
                 backgroundColor: '#4a94b1' 
               },
+              '&:disabled': {
+                backgroundColor: '#ccc',
+                color: '#666',
+              },
             }}
           >
-            {mode === 'signup' ? 'Signup' : 'Login'}
+            {isLoading || localLoading ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              mode === 'signup' ? 'Signup' : 'Login'
+            )}
           </Button>
 
           {/* Links */}
@@ -385,6 +438,21 @@ const AuthForm: React.FC<AuthFormProps> = memo(({ mode, onSubmit, onSocialLogin 
               </Typography>
             )}
           </Box>
+
+          {/* Demo Credentials for Admin */}
+          {mode === 'signin' && (
+            <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 'bold', mb: 1 }}>
+                Demo Credentials:
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
+                Admin: admin@eventforce.com / admin123
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
+                Staff: staff@eventforce.com / staff123
+              </Typography>
+            </Box>
+          )}
           </Box>
         </SlideUpInView>
       </CardContent>

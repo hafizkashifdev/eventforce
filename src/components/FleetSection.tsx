@@ -26,6 +26,8 @@ import {
 } from '@/assets/images';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
+import OptimizedImage from '@/components/OptimizedImage';
+import { THEME, IMAGE_CONFIG } from '@/constants/theme';
 
 const FleetSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -221,12 +223,14 @@ const FleetSection = () => {
                             justifyContent: 'center',
                           }}
                         >
-                          <Image
+                          <OptimizedImage
                             src={car.image.src || car.image}
                             alt={car.name}
                             width={isMobile ? 150 : 200}
                             height={isMobile ? 90 : 120}
-                            style={{ objectFit: 'contain' }}
+                            objectFit="contain"
+                            loading="lazy"
+                            sizes="(max-width: 600px) 150px, (max-width: 900px) 200px, 200px"
                           />
                           <Chip
                             label="Premium"
@@ -254,7 +258,7 @@ const FleetSection = () => {
                             sx={{
                               fontFamily: 'Poppins, sans-serif',
                               fontWeight: 'bold',
-                              color: '#52A4C1',
+                              color: THEME.colors.primary,
                               mb: 2,
                               fontSize: { xs: '1.1rem', sm: '1.25rem' },
                             }}
@@ -302,13 +306,13 @@ const FleetSection = () => {
                             variant="contained"
                             fullWidth
                             sx={{
-                              backgroundColor: '#52A4C1',
+                              backgroundColor: THEME.colors.primary,
                               borderRadius: 2,
                               py: 1.5,
                               fontWeight: 'bold',
                               textTransform: 'none',
                               '&:hover': {
-                                backgroundColor: '#4A8FA8',
+                                backgroundColor: THEME.colors.primaryDark,
                               },
                             }}
                           >

@@ -16,6 +16,8 @@ import { WhatsApp as WhatsAppIcon, ArrowUpward as ArrowUpwardIcon } from '@mui/i
 import { HeroImages } from '@/assets/images';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { ScaleInView, SlideSidewayInView, SlideUpInView } from '@/components/animations';
+import OptimizedImage from '@/components/OptimizedImage';
+import { THEME, IMAGE_CONFIG } from '@/constants/theme';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -108,17 +110,15 @@ const HeroSection = () => {
             },
           }}
         >
-          <Image
+          <OptimizedImage
             src={HeroImages.src || HeroImages}
             alt="Event Force Hero Background - Premium Transportation Services"
             fill
             priority
-            quality={85}
-            style={{ 
-              objectFit: 'cover',
-              objectPosition: 'center center'
-            }}
+            quality={IMAGE_CONFIG.quality}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            objectFit="cover"
+            objectPosition="center center"
           />
         </Box>
 
@@ -260,7 +260,7 @@ const HeroSection = () => {
                    xl: '60px'
                  },
                  '& .gradient-text': {
-                   background: 'linear-gradient(45deg, #64b5f6, #1976d2)',
+                   background: THEME.gradients.primary,
                    backgroundClip: 'text',
                    WebkitBackgroundClip: 'text',
                    WebkitTextFillColor: 'transparent',
@@ -314,7 +314,7 @@ const HeroSection = () => {
                href="/our-fleet"
                variant="contained"
                sx={{
-                 backgroundColor: '#52A4C1',
+                 backgroundColor: THEME.colors.primary,
                  borderRadius: '8px',
                  px: 3,
                  py: 1.25,
@@ -324,7 +324,7 @@ const HeroSection = () => {
                  width: '193px',
                  height: '48px',
                  '&:hover': {
-                   backgroundColor: '#4A8FA8',
+                   backgroundColor: THEME.colors.primaryDark,
                    transform: 'scale(1.05)',
                  },
                  transition: 'all 0.3s',
@@ -353,7 +353,7 @@ const HeroSection = () => {
                  gap: 1,
                  '&:hover': {
                    backgroundColor: 'white',
-                   color: '#52A4C1',
+                   color: THEME.colors.primary,
                    transform: 'scale(1.05)',
                  },
                  transition: 'all 0.3s',
@@ -370,13 +370,13 @@ const HeroSection = () => {
       {/* Floating WhatsApp Button */}
       <Fab
         color="success"
-        aria-label="Contact us on WhatsApp"
+        aria-label="Contact us on WhatsApp - Opens in new window"
         onClick={() => {
           // WhatsApp redirect with the exact number from footer: +966 59 427 9012
           const phoneNumber = '966594279012'; // +966 59 427 9012 from footer
           const message = 'Hello! I would like to know more about Event Force services.';
           const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-          window.open(whatsappUrl, '_blank');
+          window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }}
         sx={{
           position: 'fixed',
@@ -385,6 +385,10 @@ const HeroSection = () => {
           zIndex: 1000,
           '&:hover': {
             transform: 'scale(1.1)',
+          },
+          '&:focus': {
+            outline: '2px solid #25D366',
+            outlineOffset: '2px',
           },
           transition: 'transform 0.3s',
           cursor: 'pointer',

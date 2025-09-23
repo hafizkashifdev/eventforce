@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import ThemeProvider from '@/components/ThemeProvider';
+import { AuthProvider } from '@/contexts/AuthContext';
+import SEOHead from '@/components/SEOHead';
+import PerformanceMonitor from '@/components/PerformanceMonitor';
+import { SEO } from '@/constants/theme';
 import "./globals.css";
 
 const outfit = Outfit({
@@ -10,12 +14,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Event Force - Premium Transportation & Event Logistics",
-  description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
-  keywords: ["transportation", "luxury cars", "event logistics", "Saudi Arabia", "VIP transport", "car rental", "event planning"],
-  authors: [{ name: "Event Force" }],
-  creator: "Event Force",
-  publisher: "Event Force",
+  title: SEO.defaultTitle,
+  description: SEO.defaultDescription,
+  keywords: SEO.keywords,
+  authors: [{ name: SEO.siteName }],
+  creator: SEO.siteName,
+  publisher: SEO.siteName,
   robots: {
     index: true,
     follow: true,
@@ -44,35 +48,39 @@ export const metadata: Metadata = {
       },
     ],
     apple: {
-      rel: "apple-touch-icon.png",
+      rel: "apple-touch-icon",
       url: "/apple-touch-icon.png",
       type: "image/png",
       sizes: "180x180",
     },
   },
   openGraph: {
-    title: "Event Force - Premium Transportation & Event Logistics",
-    description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
-    url: `https://eventforcesa.netlify.app/.netlify.app/`,
+    title: SEO.defaultTitle,
+    description: SEO.defaultDescription,
+    url: SEO.siteUrl,
     type: "website",
     locale: "en_US",
-    siteName: "Event Force",
+    siteName: SEO.siteName,
     images: [
       {
-        url: `https://eventforcesa.netlify.app/.netlify.app/og.png`,
+        url: `${SEO.siteUrl}/og.png`,
         type: "image/png",
         width: 1200,
         height: 630,
-        alt: "Event Force - Premium Transportation",
+        alt: SEO.defaultTitle,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Event Force - Premium Transportation & Event Logistics",
-    description: "From luxury VIP vehicles to large-scale event logistics, we provide seamless, reliable, and premium transportation solutions that elevate every occasion across Saudi Arabia.",
-    images: ["https://eventforce.sa/og.png"],
+    title: SEO.defaultTitle,
+    description: SEO.defaultDescription,
+    images: [`${SEO.siteUrl}/og.png`],
   },
+  alternates: {
+    canonical: SEO.siteUrl,
+  },
+  category: 'Transportation',
 };
 
 export const viewport = {
@@ -90,11 +98,78 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="emotion-insertion-point" content="" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#52A4C1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Event Force" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${outfit.className}`} suppressHydrationWarning={true}>
         <ThemeProvider>
-          {children}
+          <AuthProvider>
+            {children}
+            <PerformanceMonitor />
+          </AuthProvider>
         </ThemeProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                      console.log('Service Worker registered successfully:', registration.scope);
+                      
+                      // Check for updates
+                      registration.addEventListener('updatefound', function() {
+                        const newWorker = registration.installing;
+                        if (newWorker) {
+                          newWorker.addEventListener('statechange', function() {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                              // New content is available, prompt user to refresh
+                              if (confirm('New version available! Refresh to update?')) {
+                                window.location.reload();
+                              }
+                            }
+                          });
+                        }
+                      });
+                      
+                      // Cache support pages on registration
+                      if (registration.active) {
+                        registration.active.postMessage({ type: 'CACHE_SUPPORT_PAGES' });
+                      }
+                    })
+                    .catch(function(error) {
+                      console.error('Service Worker registration failed:', error);
+                    });
+                });
+                
+                // Handle service worker updates
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                  window.location.reload();
+                });
+                
+                // Handle offline/online events
+                window.addEventListener('online', function() {
+                  console.log('Connection restored');
+                  // Optionally show a notification or update UI
+                });
+                
+                window.addEventListener('offline', function() {
+                  console.log('Connection lost');
+                  // Optionally show offline indicator
+                });
+              } else {
+                console.log('Service Worker not supported');
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
