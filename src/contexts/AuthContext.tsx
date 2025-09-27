@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useState, ReactNode } from 'react';
 import { AuthState, AuthContextType, LoginCredentials, RegisterCredentials } from '@/types/auth';
 import AuthService from '@/services/authService';
 
@@ -82,10 +82,19 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const authService = AuthService.getInstance();
+  const [authService, setAuthService] = useState<AuthService | null>(null);
+
+  // Initialize auth service only on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setAuthService(AuthService.getInstance());
+    }
+  }, []);
 
   // Initialize auth state on mount
   useEffect(() => {
+    if (!authService) return;
+
     const initializeAuth = async () => {
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
@@ -121,6 +130,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [authService]);
 
   const login = async (credentials: LoginCredentials): Promise<void> => {
+    if (!authService) {
+      throw new Error('Auth service not initialized');
+    }
+    
     try {
       dispatch({ type: 'AUTH_START' });
       
@@ -142,6 +155,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const register = async (credentials: RegisterCredentials): Promise<void> => {
+    if (!authService) {
+      throw new Error('Auth service not initialized');
+    }
+    
     try {
       dispatch({ type: 'AUTH_START' });
       
@@ -163,6 +180,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async (): Promise<void> => {
+    if (!authService) {
+      dispatch({ type: 'AUTH_LOGOUT' });
+      return;
+    }
+    
     try {
       await authService.logout();
     } catch (error) {
@@ -173,6 +195,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const refreshToken = async (): Promise<void> => {
+    if (!authService) {
+      throw new Error('Auth service not initialized');
+    }
+    
     try {
       const response = await authService.refreshAccessToken();
       
@@ -192,6 +218,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const forgotPassword = async (email: string): Promise<void> => {
+    if (!authService) {
+      throw new Error('Auth service not initialized');
+    }
+    
     try {
       await authService.forgotPassword(email);
     } catch (error) {
@@ -202,6 +232,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const resetPassword = async (token: string, newPassword: string): Promise<void> => {
+    if (!authService) {
+      throw new Error('Auth service not initialized');
+    }
+    
     try {
       await authService.resetPassword(token, newPassword);
     } catch (error) {

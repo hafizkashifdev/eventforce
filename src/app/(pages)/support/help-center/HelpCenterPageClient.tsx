@@ -19,8 +19,10 @@ import {
   Link
 } from '@mui/material';
 import { Search, ExpandMore, Help, Book, Support, Home } from '@mui/icons-material';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AboutBg from '@/assets/images/about-bg.png';
 import { ScaleInView, SlideUpInView } from '@/components/animations';
 
 const HelpCenterPageClient = () => {
@@ -113,34 +115,58 @@ const HelpCenterPageClient = () => {
   return (
     <>
       <Header />
-      
-      {/* Breadcrumbs */}
-      <Box sx={{ pt: 8, pb: 2, backgroundColor: '#f8f9fa' }}>
-        <Container maxWidth="lg">
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link href="/" color="inherit" sx={{ display: 'flex', alignItems: 'center' }}>
-              <Home sx={{ mr: 0.5 }} fontSize="inherit" />
-              Home
-            </Link>
-            <Link href="/support" color="inherit">
-              Support
-            </Link>
-            <Typography color="text.primary">Help Center</Typography>
-          </Breadcrumbs>
-        </Container>
-      </Box>
-      
-      {/* Hero Section */}
       <Box 
         sx={{ 
-          minHeight: '40vh',
-          background: 'linear-gradient(135deg, #1976d2 0%, #52A4C1 100%)',
+          pt: 8,
+          minHeight: '70vh',
+          position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          color: 'white'
+          overflow: 'hidden',
+          // Fallback background
+          backgroundImage: `url(${AboutBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       >
-        <Container maxWidth="lg">
+        {/* Background Image */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0
+          }}
+        >
+          <Image
+            src={AboutBg}
+            alt="Help Center Background"
+            fill
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center'
+            }}
+            priority
+          />
+        </Box>
+        
+        {/* Overlay for better text readability */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)',
+            zIndex: 1
+          }}
+        />
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
           <Box sx={{ textAlign: 'center' }}>
             <SlideUpInView initialY={60} duration={0.8}>
               <Typography 
@@ -148,7 +174,9 @@ const HelpCenterPageClient = () => {
                 component="h1" 
                 sx={{ 
                   fontWeight: 'bold', 
-                  mb: 3,
+                  mb: 4,
+                  color: 'white',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
                 }}
               >
@@ -159,43 +187,16 @@ const HelpCenterPageClient = () => {
               <Typography 
                 variant="h5" 
                 sx={{ 
-                  opacity: 0.9,
-                  maxWidth: '800px',
-                  mx: 'auto',
-                  mb: 4,
-                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }
+                  color: 'rgba(255,255,255,0.9)', 
+                  lineHeight: 1.6,
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+                  maxWidth: '800px', 
+                  mx: 'auto' 
                 }}
               >
-                Find answers to your questions and get the support you need
+                Find comprehensive guides, tutorials, and answers to help you get the most out of our services.
               </Typography>
-            </SlideUpInView>
-            
-            {/* Search Bar */}
-            <SlideUpInView initialY={40} duration={1.0} delay={0.4}>
-              <TextField
-                fullWidth
-                placeholder="Search for help articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{
-                  maxWidth: '600px',
-                  mx: 'auto',
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: 'white',
-                    borderRadius: '50px',
-                    '& fieldset': {
-                      border: 'none',
-                    },
-                  },
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search sx={{ color: '#666' }} />
-                    </InputAdornment>
-                  ),
-                }}
-              />
             </SlideUpInView>
           </Box>
         </Container>
@@ -218,6 +219,33 @@ const HelpCenterPageClient = () => {
               Popular Topics
             </Typography>
           </SlideUpInView>
+          
+          {/* Search Bar */}
+          <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+            <TextField
+              fullWidth
+              placeholder="Search for help articles..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                maxWidth: '600px',
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: 'white',
+                  borderRadius: '50px',
+                  '& fieldset': {
+                    border: 'none',
+                  },
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search sx={{ color: '#666' }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
           
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
             {popularTopics.map((topic, index) => (

@@ -27,10 +27,12 @@ import {
   ContactSupport
 } from '@mui/icons-material';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import OfflineFallback from '@/components/OfflineFallback';
 import PWATest from '@/components/PWATest';
+import AboutBg from '@/assets/images/about-bg.png';
 import { ScaleInView, SlideUpInView } from '@/components/animations';
 import { useOffline } from '@/hooks/useOffline';
 
@@ -101,18 +103,58 @@ const SupportPage = () => {
     <>
       <Header />
       
-      {/* Hero Section */}
       <Box 
         sx={{ 
           pt: 8,
-          minHeight: '50vh',
-          background: 'linear-gradient(135deg, #52A4C1 0%, #1976d2 100%)',
+          minHeight: '70vh',
+          position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          color: 'white'
+          overflow: 'hidden',
+          // Fallback background
+          backgroundImage: `url(${AboutBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       >
-        <Container maxWidth="lg">
+        {/* Background Image */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0
+          }}
+        >
+          <Image
+            src={AboutBg}
+            alt="Support Center Background"
+            fill
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'center'
+            }}
+            priority
+          />
+        </Box>
+        
+        {/* Overlay for better text readability */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)',
+            zIndex: 1
+          }}
+        />
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
           <Box sx={{ textAlign: 'center' }}>
             <SlideUpInView initialY={60} duration={0.8}>
               <Typography 
@@ -120,7 +162,9 @@ const SupportPage = () => {
                 component="h1" 
                 sx={{ 
                   fontWeight: 'bold', 
-                  mb: 3,
+                  mb: 4,
+                  color: 'white',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
                 }}
               >
@@ -131,10 +175,12 @@ const SupportPage = () => {
               <Typography 
                 variant="h5" 
                 sx={{ 
-                  opacity: 0.9,
-                  maxWidth: '800px',
-                  mx: 'auto',
-                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }
+                  color: 'rgba(255,255,255,0.9)', 
+                  lineHeight: 1.6,
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+                  maxWidth: '800px', 
+                  mx: 'auto' 
                 }}
               >
                 Get help, find answers, and access all the information you need

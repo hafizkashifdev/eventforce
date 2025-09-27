@@ -8,10 +8,16 @@ class AuthService {
   private refreshToken: string | null = null;
 
   private constructor() {
-    // Initialize tokens from localStorage if available
+    // Initialize tokens from localStorage if available (only on client side)
     if (typeof window !== 'undefined') {
-      this.accessToken = localStorage.getItem('accessToken');
-      this.refreshToken = localStorage.getItem('refreshToken');
+      try {
+        this.accessToken = localStorage.getItem('accessToken');
+        this.refreshToken = localStorage.getItem('refreshToken');
+      } catch (error) {
+        console.warn('Failed to access localStorage:', error);
+        this.accessToken = null;
+        this.refreshToken = null;
+      }
     }
   }
 
@@ -56,8 +62,12 @@ class AuthService {
     this.refreshToken = refreshToken;
     
     if (typeof window !== 'undefined') {
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      try {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      } catch (error) {
+        console.warn('Failed to save tokens to localStorage:', error);
+      }
     }
   }
 
@@ -66,8 +76,12 @@ class AuthService {
     this.refreshToken = null;
     
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      try {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+      } catch (error) {
+        console.warn('Failed to clear tokens from localStorage:', error);
+      }
     }
   }
 
