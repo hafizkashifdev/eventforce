@@ -140,15 +140,18 @@ const FleetPage = memo(() => {
   const handleBookCar = useCallback((index: number) => {
     const car = filteredFleet[index]
     if (car) {
+      // Extract numeric price from the price string (e.g., "125 SAR" -> "125")
+      const numericPrice = car.price.replace(/[^\d]/g, '');
+      
       // Create URL parameters for the selected car
       const params = new URLSearchParams({
         car: car.name.toLowerCase().replace(/\s+/g, '-'),
-        price: car.price,
+        price: numericPrice,
         duration: car.duration
       })
       
-      // Redirect to manage booking page with car data
-      window.location.href = `/manage-booking?${params.toString()}`
+      // Redirect to booking page with car data
+      window.location.href = `/booking?${params.toString()}`
     }
   }, [filteredFleet]);
 
