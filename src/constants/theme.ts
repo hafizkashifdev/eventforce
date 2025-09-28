@@ -171,7 +171,7 @@ export const SEO = {
   },
   contact: {
     phone: '+966 59 427 9012',
-    email: 'Reservations@eventforce.sa.com',
+    email: 'reservations@eventforce.sa.com',
     address: 'Saudi Arabia',
   }
 } as const;

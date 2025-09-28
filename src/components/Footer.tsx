@@ -238,7 +238,7 @@ const Footer = () => {
               </MuiLink>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2">Reservations@eventforce.sa.com</Typography>
+              <Typography variant="body2">reservations@eventforce.sa.com</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography variant="body2">Saudi Arabia</Typography>

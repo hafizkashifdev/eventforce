@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@mui/material', '@mui/icons-material', 'framer-motion'],
   },
   
+  // Fix cross-origin warnings
+  allowedDevOrigins: ['192.168.1.13'],
+  
   // Headers for better caching
   async headers() {
     return [

@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:analyze": "ANALYZE=true next build",
+    "build:production": "next build"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",

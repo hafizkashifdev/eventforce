@@ -35,7 +35,7 @@ Company Profile:
 
 Contact Information:
 Phone: +966 59 427 9012
-Email: Reservations@eventforce.sa.com
+Email: reservations@eventforce.sa.com
 Headquarters: White Space 2444 Taha Khasiyfan - Ash Shati Dist. Unit No 4707 Jeddah 23511
 Branch: White Space, King Abdullah Dt., Riyadh 12211, Saudi Arabia
 

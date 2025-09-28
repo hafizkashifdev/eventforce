@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
   Box, 
@@ -47,6 +47,7 @@ import {
 
 const BookingPage = () => {
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
   
   // Car mapping for images and default data
   const carMapping: { [key: string]: { image: any; defaultPrice: number; defaultPeriod: string } } = {
@@ -104,6 +105,9 @@ const BookingPage = () => {
         selectedCar: carParam
       }));
     }
+    
+    // Set loading to false after initial setup
+    setIsLoading(false);
   }, [searchParams]);
 
   const handleInputChange = (field: string, value: string) => {
@@ -133,6 +137,22 @@ const BookingPage = () => {
     // Handle cancel action
     window.history.back();
   };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f0'
+      }}>
+        <Typography variant="h6" sx={{ color: '#52A4C1' }}>
+          Loading booking page...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <>

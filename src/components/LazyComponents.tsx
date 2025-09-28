@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { FleetGridSkeleton, HeroSkeleton, PageContentSkeleton } from './LoadingSkeleton';
 
-// Lazy load heavy components
+// Lazy load heavy components with optimized loading
 export const LazyFleetSection = dynamic(() => import('./FleetSection'), {
   loading: () => <FleetGridSkeleton count={4} />,
   ssr: false,
@@ -26,6 +26,18 @@ export const LazyBenefitsSection = dynamic(() => import('./BenefitsSection'), {
 });
 
 export const LazyContactSection = dynamic(() => import('./ContactSection'), {
+  loading: () => <PageContentSkeleton />,
+  ssr: false,
+});
+
+// Lazy load booking page components
+export const LazyBookingPage = dynamic(() => import('@/app/(pages)/booking/page'), {
+  loading: () => <PageContentSkeleton />,
+  ssr: false,
+});
+
+// Lazy load other heavy pages
+export const LazyOurFleetPage = dynamic(() => import('@/app/(pages)/our-fleet/page'), {
   loading: () => <PageContentSkeleton />,
   ssr: false,
 });

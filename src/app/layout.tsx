@@ -4,6 +4,7 @@ import ThemeProvider from '@/components/ThemeProvider';
 import { AuthProvider } from '@/contexts/AuthContext';
 import SEOHead from '@/components/SEOHead';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
+import PerformanceOptimizer from '@/components/PerformanceOptimizer';
 import { SEO } from '@/constants/theme';
 import "./globals.css";
 
@@ -111,6 +112,7 @@ export default function RootLayout({
       <body className={`${outfit.className}`} suppressHydrationWarning={true}>
         <ThemeProvider>
           <AuthProvider>
+            <PerformanceOptimizer />
             {children}
             <PerformanceMonitor />
           </AuthProvider>

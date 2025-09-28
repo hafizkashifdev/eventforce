@@ -479,7 +479,7 @@ const FAQPageClient = () => {
                       Email Us
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#666' }}>
-                      Reservations@eventforce.sa.com
+                      reservations@eventforce.sa.com
                     </Typography>
                   </Card>
                 </ScaleInView>

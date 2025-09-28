@@ -94,7 +94,7 @@ const ContactSection = () => {
                     <EmailIcon />
                   </IconButton>
                   <Typography variant="body1" sx={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif' }}>
-                    Reservations@eventforce.sa.com
+                    reservations@eventforce.sa.com
                   </Typography>
                 </Box>
 
