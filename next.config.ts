@@ -62,6 +62,12 @@ const nextConfig: NextConfig = {
   
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
+    // Exclude backend folder from build
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/backend/**', '**/admin-dashboard/**'],
+    };
+    
     // Production optimizations
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
@@ -89,18 +95,9 @@ const nextConfig: NextConfig = {
     return config;
   },
   
-  // PWA support
-  async rewrites() {
-    return [
-      {
-        source: '/service-worker.js',
-        destination: '/service-worker.js',
-      },
-      {
-        source: '/sw.js',
-        destination: '/_next/static/sw.js',
-      },
-    ];
+  // TypeScript configuration - ignore build errors for backend files
+  typescript: {
+    ignoreBuildErrors: false,
   },
 };
 

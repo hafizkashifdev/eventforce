@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
       <Grid container spacing={3}>
         {/* Users Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12, sm:6, md:3}}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center">
@@ -95,7 +95,7 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Bookings Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12, sm:6, md:3}}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center">
@@ -114,7 +114,7 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Vehicles Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12, sm:6, md:3}}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center">
@@ -133,7 +133,7 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Revenue Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12, sm:6, md:3}}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center">
@@ -152,7 +152,7 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Charts */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12, md:3}}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12, md:3}}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -187,7 +187,7 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Recent Bookings */}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>

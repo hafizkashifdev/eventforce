@@ -152,7 +152,7 @@ export default function VehiclesPage() {
       </Box>
 
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12, sm:6, md:3}}>
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
@@ -226,7 +226,7 @@ export default function VehiclesPage() {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 fullWidth
                 label="Name"
@@ -235,7 +235,7 @@ export default function VehiclesPage() {
                 required
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 fullWidth
                 label="Description"
@@ -245,7 +245,7 @@ export default function VehiclesPage() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </Grid>
-            <Grid item xs={6}>
+             <Grid size={6}>
               <TextField
                 fullWidth
                 label="Seats"
@@ -254,7 +254,7 @@ export default function VehiclesPage() {
                 onChange={(e) => setFormData({ ...formData, seats: e.target.value })}
               />
             </Grid>
-            <Grid item xs={6}>
+             <Grid size={6}>
               <TextField
                 fullWidth
                 label="Price per Hour (cents)"
