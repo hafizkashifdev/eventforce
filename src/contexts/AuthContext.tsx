@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { AuthState, AuthContextType, LoginCredentials, RegisterCredentials } from '@/types/auth';
-import AuthService from '@/services/authService';
 
 const initialState: AuthState = {
   user: null,
@@ -80,34 +79,39 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Static mock users for demo
+const MOCK_USERS = [
+  { id: '1', email: 'admin@eventforce.com', name: 'Admin User', role: 'ADMIN' },
+  { id: '2', email: 'staff@eventforce.com', name: 'Staff User', role: 'STAFF' },
+  { id: '3', email: 'customer@example.com', name: 'Customer User', role: 'CUSTOMER' },
+];
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const authService = AuthService.getInstance();
 
   // Initialize auth state on mount
   useEffect(() => {
-    const initializeAuth = async () => {
+    const initializeAuth = () => {
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
         
-        const user = authService.getCurrentUser();
-        if (user && authService.isAuthenticated()) {
-          // Validate token
-          const isValid = await authService.validateToken();
-          if (isValid) {
+        if (typeof window !== 'undefined') {
+          const storedUser = localStorage.getItem('user');
+          const storedToken = localStorage.getItem('accessToken');
+          
+          if (storedUser && storedToken) {
+            const user = JSON.parse(storedUser);
             dispatch({
               type: 'AUTH_SUCCESS',
               payload: {
                 user,
-                accessToken: authService.getAccessToken()!,
-                refreshToken: authService.getRefreshToken()!,
+                accessToken: storedToken,
+                refreshToken: localStorage.getItem('refreshToken') || '',
               },
             });
           } else {
             dispatch({ type: 'AUTH_LOGOUT' });
           }
-        } else {
-          dispatch({ type: 'AUTH_LOGOUT' });
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
@@ -118,20 +122,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     initializeAuth();
-  }, [authService]);
+  }, []);
 
   const login = async (credentials: LoginCredentials): Promise<void> => {
     try {
       dispatch({ type: 'AUTH_START' });
       
-      const response = await authService.login(credentials);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Find user in mock data or create new one
+      let user = MOCK_USERS.find(u => u.email === credentials.email);
+      
+      if (!user) {
+        // For demo: allow any email/password
+        user = {
+          id: Date.now().toString(),
+          email: credentials.email,
+          name: credentials.email.split('@')[0],
+          role: 'CUSTOMER',
+        };
+      }
+      
+      const accessToken = `mock_token_${Date.now()}`;
+      const refreshToken = `mock_refresh_${Date.now()}`;
+      
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
       
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: {
-          user: response.user,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
+          user,
+          accessToken,
+          refreshToken,
         },
       });
     } catch (error) {
@@ -145,14 +172,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       dispatch({ type: 'AUTH_START' });
       
-      const response = await authService.register(credentials);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Create new user
+      const user = {
+        id: Date.now().toString(),
+        email: credentials.email,
+        name: credentials.name || credentials.email.split('@')[0],
+        role: 'CUSTOMER',
+      };
+      
+      const accessToken = `mock_token_${Date.now()}`;
+      const refreshToken = `mock_refresh_${Date.now()}`;
+      
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
       
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: {
-          user: response.user,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
+          user,
+          accessToken,
+          refreshToken,
         },
       });
     } catch (error) {
@@ -163,52 +208,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async (): Promise<void> => {
-    try {
-      await authService.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      dispatch({ type: 'AUTH_LOGOUT' });
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
+    dispatch({ type: 'AUTH_LOGOUT' });
   };
 
   const refreshToken = async (): Promise<void> => {
-    try {
-      const response = await authService.refreshAccessToken();
-      
+    // Static implementation - just return current token
+    const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    
+    if (storedUser && storedToken) {
+      const user = JSON.parse(storedUser);
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: {
-          user: response.user,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
+          user,
+          accessToken: storedToken,
+          refreshToken: typeof window !== 'undefined' ? localStorage.getItem('refreshToken') || '' : '',
         },
       });
-    } catch (error) {
-      console.error('Token refresh failed:', error);
+    } else {
       dispatch({ type: 'AUTH_LOGOUT' });
-      throw error;
     }
   };
 
   const forgotPassword = async (email: string): Promise<void> => {
-    try {
-      await authService.forgotPassword(email);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Forgot password failed';
-      dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
-      throw error;
-    }
+    // Static implementation - just simulate success
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('Password reset email sent to:', email);
   };
 
   const resetPassword = async (token: string, newPassword: string): Promise<void> => {
-    try {
-      await authService.resetPassword(token, newPassword);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Reset password failed';
-      dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
-      throw error;
-    }
+    // Static implementation - just simulate success
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('Password reset successful');
   };
 
   const clearError = (): void => {

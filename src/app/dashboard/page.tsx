@@ -1,14 +1,12 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
   Card,
   CardContent,
   Typography,
-  CircularProgress,
-  Alert,
 } from '@mui/material';
 import {
   People as PeopleIcon,
@@ -16,7 +14,6 @@ import {
   BookOnline as BookingIcon,
   Payment as PaymentIcon,
 } from '@mui/icons-material';
-import api from '@/lib/api';
 import DashboardChart from '@/components/DashboardChart';
 
 interface DashboardMetrics {
@@ -36,30 +33,39 @@ interface DashboardMetrics {
   };
 }
 
-export default function DashboardPage() {
-  const { data: metrics, isLoading, error } = useQuery<DashboardMetrics>({
-    queryKey: ['dashboard-metrics'],
-    queryFn: async () => {
-      const response = await api.get('/admin/dashboard');
-      return response.data;
+// Static mock data
+const mockMetrics: DashboardMetrics = {
+  users: {
+    total: 1250,
+    byRole: {
+      admin: 5,
+      staff: 25,
+      customer: 1220,
     },
-  });
+  },
+  bookings: {
+    total: 3420,
+    byStatus: {
+      PENDING: 45,
+      CONFIRMED: 280,
+      COMPLETED: 3050,
+      CANCELED: 45,
+    },
+    recent: [
+      { id: '1', user: { name: 'Ahmed Ali', email: 'ahmed@example.com' }, vehicle: { name: 'Mercedes S-Class' }, status: 'CONFIRMED', createdAt: new Date().toISOString() },
+      { id: '2', user: { name: 'Sarah Khan', email: 'sarah@example.com' }, vehicle: { name: 'BMW 5 Series' }, status: 'COMPLETED', createdAt: new Date().toISOString() },
+      { id: '3', user: { name: 'Mohammed Hassan', email: 'mohammed@example.com' }, vehicle: { name: 'Toyota Coaster' }, status: 'PENDING', createdAt: new Date().toISOString() },
+    ],
+  },
+  payments: {
+    total: 3420,
+    totalRevenue: 12500000, // in cents
+    recent: [],
+  },
+};
 
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        Failed to load dashboard metrics. Please try again.
-      </Alert>
-    );
-  }
+export default function DashboardPage() {
+  const [metrics] = useState<DashboardMetrics>(mockMetrics);
 
   const formatCurrency = (cents: number) => {
     return new Intl.NumberFormat('en-US', {

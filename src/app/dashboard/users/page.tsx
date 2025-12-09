@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Typography,
@@ -12,8 +11,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  CircularProgress,
-  Alert,
   Button,
   Dialog,
   DialogTitle,
@@ -26,7 +23,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import { useState } from 'react';
-import api from '../../../lib/api';
 
 interface User {
   id: string;
@@ -37,6 +33,14 @@ interface User {
   createdAt: string;
 }
 
+// Static mock data
+const mockUsers: User[] = [
+  { id: '1', email: 'admin@eventforce.com', name: 'Admin User', role: 'ADMIN', isVerified: true, createdAt: new Date().toISOString() },
+  { id: '2', email: 'staff@eventforce.com', name: 'Staff User', role: 'STAFF', isVerified: true, createdAt: new Date().toISOString() },
+  { id: '3', email: 'customer1@example.com', name: 'Ahmed Ali', role: 'CUSTOMER', isVerified: true, createdAt: new Date().toISOString() },
+  { id: '4', email: 'customer2@example.com', name: 'Sarah Khan', role: 'CUSTOMER', isVerified: false, createdAt: new Date().toISOString() },
+];
+
 export default function UsersPage() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -46,14 +50,12 @@ export default function UsersPage() {
     name: '',
     role: 'CUSTOMER' as 'CUSTOMER' | 'STAFF' | 'ADMIN',
   });
+  const [users, setUsers] = useState<User[]>(mockUsers);
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['users', page, limit],
-    queryFn: async () => {
-      const response = await api.get(`/users?page=${page}&limit=${limit}`);
-      return response.data;
-    },
-  });
+  const data = {
+    users: users.slice((page - 1) * limit, page * limit),
+    total: users.length,
+  };
 
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
@@ -64,27 +66,17 @@ export default function UsersPage() {
     setEditDialogOpen(true);
   };
 
-  const handleSaveUser = async () => {
+  const handleSaveUser = () => {
     if (!selectedUser) return;
-
-    try {
-      await api.patch(`/users/${selectedUser.id}`, editForm);
-      setEditDialogOpen(false);
-      refetch();
-    } catch (error) {
-      console.error('Failed to update user:', error);
-    }
+    setUsers(prev => prev.map(u => 
+      u.id === selectedUser.id ? { ...u, ...editForm } : u
+    ));
+    setEditDialogOpen(false);
   };
 
-  const handleDeleteUser = async (userId: string) => {
+  const handleDeleteUser = (userId: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
-
-    try {
-      await api.delete(`/users/${userId}`);
-      refetch();
-    } catch (error) {
-      console.error('Failed to delete user:', error);
-    }
+    setUsers(prev => prev.filter(u => u.id !== userId));
   };
 
   const getRoleColor = (role: string) => {
@@ -99,22 +91,6 @@ export default function UsersPage() {
         return 'default';
     }
   };
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        Failed to load users. Please try again.
-      </Alert>
-    );
-  }
 
   return (
     <Box>

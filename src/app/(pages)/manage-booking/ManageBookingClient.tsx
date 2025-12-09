@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { 
   Box, 
   Typography, 
@@ -32,7 +31,6 @@ import Footer from '@/components/Footer';
 import { ScaleInView, SlideUpInView } from '@/components/animations';
 
 const ManageBookingClient = () => {
-  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [bookings, setBookings] = useState<any[]>([]);

@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Typography,
@@ -12,8 +11,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  CircularProgress,
-  Alert,
   Button,
   Dialog,
   DialogTitle,
@@ -25,7 +22,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import { useState } from 'react';
-import api from '../../../lib/api';
 
 interface Booking {
   id: string;
@@ -47,20 +43,58 @@ interface Booking {
   };
 }
 
+// Static mock data
+const mockBookings: Booking[] = [
+  {
+    id: '1',
+    userId: 'user1',
+    vehicleId: 'vehicle1',
+    startAt: new Date().toISOString(),
+    endAt: new Date(Date.now() + 86400000).toISOString(),
+    totalCents: 50000,
+    status: 'PENDING',
+    createdAt: new Date().toISOString(),
+    user: { id: 'user1', email: 'ahmed@example.com', name: 'Ahmed Ali' },
+    vehicle: { id: 'vehicle1', name: 'Mercedes S-Class' },
+  },
+  {
+    id: '2',
+    userId: 'user2',
+    vehicleId: 'vehicle2',
+    startAt: new Date().toISOString(),
+    endAt: new Date(Date.now() + 86400000).toISOString(),
+    totalCents: 30000,
+    status: 'CONFIRMED',
+    createdAt: new Date().toISOString(),
+    user: { id: 'user2', email: 'sarah@example.com', name: 'Sarah Khan' },
+    vehicle: { id: 'vehicle2', name: 'BMW 5 Series' },
+  },
+  {
+    id: '3',
+    userId: 'user3',
+    vehicleId: 'vehicle3',
+    startAt: new Date().toISOString(),
+    endAt: new Date(Date.now() + 86400000).toISOString(),
+    totalCents: 150000,
+    status: 'COMPLETED',
+    createdAt: new Date().toISOString(),
+    user: { id: 'user3', email: 'mohammed@example.com', name: 'Mohammed Hassan' },
+    vehicle: { id: 'vehicle3', name: 'Toyota Coaster' },
+  },
+];
+
 export default function BookingsPage() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [newStatus, setNewStatus] = useState<'PENDING' | 'CONFIRMED' | 'CANCELED' | 'COMPLETED'>('PENDING');
+  const [bookings, setBookings] = useState<Booking[]>(mockBookings);
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['bookings', page, limit],
-    queryFn: async () => {
-      const response = await api.get(`/bookings?page=${page}&limit=${limit}`);
-      return response.data;
-    },
-  });
+  const data = {
+    bookings: bookings.slice((page - 1) * limit, page * limit),
+    total: bookings.length,
+  };
 
   const handleStatusChange = (booking: Booking) => {
     setSelectedBooking(booking);
@@ -68,34 +102,24 @@ export default function BookingsPage() {
     setStatusDialogOpen(true);
   };
 
-  const handleSaveStatus = async () => {
+  const handleSaveStatus = () => {
     if (!selectedBooking) return;
-
-    try {
-      await api.patch(`/bookings/${selectedBooking.id}`, { status: newStatus });
-      setStatusDialogOpen(false);
-      refetch();
-    } catch (error) {
-      console.error('Failed to update booking status:', error);
-    }
+    setBookings(prev => prev.map(b => 
+      b.id === selectedBooking.id ? { ...b, status: newStatus } : b
+    ));
+    setStatusDialogOpen(false);
   };
 
-  const handleConfirmBooking = async (bookingId: string) => {
-    try {
-      await api.post(`/bookings/${bookingId}/confirm`);
-      refetch();
-    } catch (error) {
-      console.error('Failed to confirm booking:', error);
-    }
+  const handleConfirmBooking = (bookingId: string) => {
+    setBookings(prev => prev.map(b => 
+      b.id === bookingId ? { ...b, status: 'CONFIRMED' } : b
+    ));
   };
 
-  const handleCompleteBooking = async (bookingId: string) => {
-    try {
-      await api.post(`/bookings/${bookingId}/complete`);
-      refetch();
-    } catch (error) {
-      console.error('Failed to complete booking:', error);
-    }
+  const handleCompleteBooking = (bookingId: string) => {
+    setBookings(prev => prev.map(b => 
+      b.id === bookingId ? { ...b, status: 'COMPLETED' } : b
+    ));
   };
 
   const getStatusColor = (status: string) => {
@@ -119,22 +143,6 @@ export default function BookingsPage() {
       currency: 'USD',
     }).format(cents / 100);
   };
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        Failed to load bookings. Please try again.
-      </Alert>
-    );
-  }
 
   return (
     <Box>

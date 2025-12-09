@@ -25,7 +25,6 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import api from '../../../lib/api';
 
 interface Vehicle {
   id: string;
@@ -36,6 +35,13 @@ interface Vehicle {
   createdAt: string;
   updatedAt: string;
 }
+
+// Static mock data
+const mockVehicles: Vehicle[] = [
+  { id: '1', name: 'Mercedes S-Class', description: 'Luxury sedan', seats: 4, priceCents: 40000, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '2', name: 'BMW 5 Series', description: 'Premium sedan', seats: 4, priceCents: 30000, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '3', name: 'Toyota Coaster', description: 'Large bus', seats: 49, priceCents: 150000, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+];
 
 export default function VehiclesPage() {
   const [page, setPage] = useState(1);
@@ -49,14 +55,12 @@ export default function VehiclesPage() {
     seats: '',
     priceCents: '',
   });
+  const [vehicles, setVehicles] = useState<Vehicle[]>(mockVehicles);
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['vehicles', page, limit],
-    queryFn: async () => {
-      const response = await api.get(`/vehicles?page=${page}&limit=${limit}`);
-      return response.data;
-    },
-  });
+  const data = {
+    vehicles: vehicles.slice((page - 1) * limit, page * limit),
+    total: vehicles.length,
+  };
 
   const handleAddVehicle = () => {
     setFormData({
@@ -79,38 +83,36 @@ export default function VehiclesPage() {
     setEditDialogOpen(true);
   };
 
-  const handleSaveVehicle = async () => {
-    try {
-      const payload = {
-        name: formData.name,
-        description: formData.description || undefined,
-        seats: formData.seats ? parseInt(formData.seats) : undefined,
-        priceCents: parseInt(formData.priceCents),
+  const handleSaveVehicle = () => {
+    const payload = {
+      name: formData.name,
+      description: formData.description || undefined,
+      seats: formData.seats ? parseInt(formData.seats) : undefined,
+      priceCents: parseInt(formData.priceCents),
+    };
+
+    if (selectedVehicle) {
+      setVehicles(prev => prev.map(v => 
+        v.id === selectedVehicle.id ? { ...v, ...payload } : v
+      ));
+    } else {
+      const newVehicle: Vehicle = {
+        id: Date.now().toString(),
+        ...payload,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
-
-      if (selectedVehicle) {
-        await api.patch(`/vehicles/${selectedVehicle.id}`, payload);
-      } else {
-        await api.post('/vehicles', payload);
-      }
-
-      setAddDialogOpen(false);
-      setEditDialogOpen(false);
-      refetch();
-    } catch (error) {
-      console.error('Failed to save vehicle:', error);
+      setVehicles(prev => [...prev, newVehicle]);
     }
+
+    setAddDialogOpen(false);
+    setEditDialogOpen(false);
+    setFormData({ name: '', description: '', seats: '', priceCents: '' });
   };
 
-  const handleDeleteVehicle = async (vehicleId: string) => {
+  const handleDeleteVehicle = (vehicleId: string) => {
     if (!confirm('Are you sure you want to delete this vehicle?')) return;
-
-    try {
-      await api.delete(`/vehicles/${vehicleId}`);
-      refetch();
-    } catch (error) {
-      console.error('Failed to delete vehicle:', error);
-    }
+    setVehicles(prev => prev.filter(v => v.id !== vehicleId));
   };
 
   const formatCurrency = (cents: number) => {
@@ -119,22 +121,6 @@ export default function VehiclesPage() {
       currency: 'USD',
     }).format(cents / 100);
   };
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        Failed to load vehicles. Please try again.
-      </Alert>
-    );
-  }
 
   return (
     <Box>

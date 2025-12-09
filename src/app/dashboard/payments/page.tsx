@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Typography,
@@ -12,8 +11,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  CircularProgress,
-  Alert,
   Button,
   Dialog,
   DialogTitle,
@@ -25,7 +22,6 @@ import {
   CardContent,
 } from '@mui/material';
 import { useState } from 'react';
-import api from '../../../lib/api';
 
 interface Payment {
   id: string;
@@ -49,6 +45,36 @@ interface Payment {
   };
 }
 
+// Static mock data
+const mockPayments: Payment[] = [
+  {
+    id: '1',
+    bookingId: 'booking1',
+    amountCents: 50000,
+    currency: 'USD',
+    status: 'COMPLETED',
+    createdAt: new Date().toISOString(),
+    booking: {
+      id: 'booking1',
+      user: { id: 'user1', email: 'ahmed@example.com', name: 'Ahmed Ali' },
+      vehicle: { id: 'vehicle1', name: 'Mercedes S-Class' },
+    },
+  },
+  {
+    id: '2',
+    bookingId: 'booking2',
+    amountCents: 30000,
+    currency: 'USD',
+    status: 'PENDING',
+    createdAt: new Date().toISOString(),
+    booking: {
+      id: 'booking2',
+      user: { id: 'user2', email: 'sarah@example.com', name: 'Sarah Khan' },
+      vehicle: { id: 'vehicle2', name: 'BMW 5 Series' },
+    },
+  },
+];
+
 export default function PaymentsPage() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -56,14 +82,12 @@ export default function PaymentsPage() {
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [refundAmount, setRefundAmount] = useState('');
   const [refundReason, setRefundReason] = useState('');
+  const [payments, setPayments] = useState<Payment[]>(mockPayments);
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['payments', page, limit],
-    queryFn: async () => {
-      const response = await api.get(`/payments?page=${page}&limit=${limit}`);
-      return response.data;
-    },
-  });
+  const data = {
+    payments: payments.slice((page - 1) * limit, page * limit),
+    total: payments.length,
+  };
 
   const handleRefundPayment = (payment: Payment) => {
     setSelectedPayment(payment);
@@ -72,20 +96,13 @@ export default function PaymentsPage() {
     setRefundDialogOpen(true);
   };
 
-  const handleProcessRefund = async () => {
+  const handleProcessRefund = () => {
     if (!selectedPayment) return;
-
-    try {
-      await api.post('/payments/refund', {
-        paymentId: selectedPayment.id,
-        refundAmountCents: refundAmount ? parseInt(refundAmount) : undefined,
-        refundReason: refundReason || undefined,
-      });
-      setRefundDialogOpen(false);
-      refetch();
-    } catch (error) {
-      console.error('Failed to process refund:', error);
-    }
+    // Update payment status to refunded
+    setPayments(prev => prev.map(p => 
+      p.id === selectedPayment.id ? { ...p, status: 'REFUNDED' } : p
+    ));
+    setRefundDialogOpen(false);
   };
 
   const getStatusColor = (status: string) => {
@@ -111,22 +128,6 @@ export default function PaymentsPage() {
       currency: 'USD',
     }).format(cents / 100);
   };
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        Failed to load payments. Please try again.
-      </Alert>
-    );
-  }
 
   const totalRevenue = data?.payments?.reduce((sum: number, payment: Payment) => {
     return payment.status === 'succeeded' ? sum + payment.amountCents : sum;
